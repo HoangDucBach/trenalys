@@ -1,0 +1,20 @@
+@import "../scss/_variables.scss";
+.home-component {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-introduction-content {
+  .container-introduction-extra-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    & p{
+      font-size:$size-text-xxlarge;
+    }
+  }
+  .container-introduction-content {
+    font-size: 60px;
+    font-weight: 700;
+  }
+}
