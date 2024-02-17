@@ -4,6 +4,7 @@ import {DashboardComponent} from "./dashboard.component";
 import axios from "axios";
 import {SVGLogo} from "./global.component";
 import "./home.component.scss";
+
 export function HomeIntroductionContent() {
     return (
         <div className="home-introduction-content">
@@ -23,7 +24,7 @@ export function HomeIntroductionContent() {
 
 }
 
-export function HomeLogin({ setToken }){
+export function HomeLogin({setToken}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -42,7 +43,11 @@ export function HomeLogin({ setToken }){
                     }
                 }
             );
-            console.log('Login response:', response);
+            if (response.data.success) {
+                console.log('Login success:', response.data);
+            } else {
+                console.log('Login failed:', response.data);
+            }
             const token = response.data.token;
             setToken(token);
 
@@ -54,37 +59,42 @@ export function HomeLogin({ setToken }){
     return (
         <div className="home-login">
             <div className="container-login">
-                <div className="login-content">
-                    <input
-                        type="text"
-                        placeholder="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                    <input
-                        type="password"
-                        placeholder="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <div className="container-login-and-register">
-                        <button onClick={loginUser} >Log in</button>
-                        <button>Register</button>
-                    </div>
-                </div>
+                <input
+                    type="text"
+                    placeholder="Gmail"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+            </div>
+            <div className="container-login-and-register">
+                <button className="button-radius login-button" onClick={loginUser}>Log in</button>
+                <button className="button-radius register-button">Register</button>
             </div>
         </div>
     );
 };
 
+export function HomeMain() {
+    return(
+        <div className="home-main">
+            <HomeIntroductionContent/>
+            <HomeLogin/>
+        </div>
+    )
+}
 export function HomeComponent() {
     const [token, setToken] = useState();
     if (!token) {
         return (
             <div className="home-component">
-                <HeaderTop/>
-                <HomeIntroductionContent/>
-                <HomeLogin setToken={setToken}/>
+                    <HeaderTop/>
+                    <HomeMain/>
             </div>
         );
     }
@@ -92,7 +102,7 @@ export function HomeComponent() {
         <DashboardComponent/>
     )
     return (
-        <div className="home">
+        <div className="home-component">
             <HeaderTop/>
             <HomeIntroductionContent/>
             <HomeLogin/>
