@@ -4,15 +4,32 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  padding: 0 30px;
 }
+
 .home-main {
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: center;
   height: 100%;
 }
-.home-introduction-content {
-  .container-introduction-extra-content {
+
+.home-demo {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+
+.home-demo-content {
+  display: flex;
+  flex-shrink: 2;
+  gap: $spacing-normal;
+  flex-direction: column;
+
+  & .container-demo-extra-content {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -22,11 +39,22 @@
     }
   }
 
-  .container-introduction-content {
+  & .container-demo-content {
+    color: $color-05;
+    font-size: $size-text-xxxlarge;
+
+    & b {
+      font-weight: 900;
+      color: $color-05;
+
+    }
+  }
+
+  & .container-demo-content-title {
     font-size: 60px;
     font-weight: 700;
     word-break: break-word;
-    width: 30rem;
+    width: 100%;
 
     & span {
       font-weight: 900;
@@ -35,51 +63,23 @@
   }
 }
 
-.home-login {
-  width: 15rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.container-login {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
+.home-demo-image {
   width: 100%;
+  height: 100%;
+  object-fit: contain;
 
-  & input {
-    all: unset;
-    color: $color-01;
-    font-size: $size-text-normal;
-    font-weight: 500;
-    background-color: $color-01;
-    padding: 15px;
-    border-radius: $radius-normal;
-    width: 100%;
-  }
+  flex-shrink: 1;
 }
 
-.container-login-and-register {
+.home-login-incorrect-message {
+  font-size: $size-text-normal;
+  font-weight: 500;
+  color: #FF4D4D;
+}
+
+.home-demo-buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-
-  & .login-button {
-    background-color: $color-30;
-    color: $color-60;
-    padding: 15px 15px;
-    width: 100%;
-  }
-
-  & .register-button {
-    background-color: transparent;
-    border: 1px solid $color-30;
-    color: $color-30;
-    padding: 15px 15px;
-    width: 100%;
-  }
+  gap: 20px;
+  width: 300px;
 }

@@ -1,111 +1,97 @@
 import {HeaderTop} from "./header.component";
 import {useState} from "react";
 import {DashboardComponent} from "./dashboard.component";
-import axios from "axios";
-import {SVGLogo} from "./global.component";
 import "./home.component.scss";
+import "./engine.component.scss";
+import {LoginEngine, RegisterEngine} from "./engine.component";
+import {Link, useLocation} from "react-router-dom";
 
-export function HomeIntroductionContent() {
+export function HomeDemoContent() {
+    const location = useLocation();
+    if (location.pathname === "/login") {
+        return (
+            <div className="home-demo-content">
+                <LoginEngine/>
+            </div>);
+    }
+    if (location.pathname === "/register") {
+        return (
+            <div className="home-demo-content">
+                <RegisterEngine/>
+            </div>
+        );
+    }
     return (
-        <div className="home-introduction-content">
-            <div className="container-introduction-extra-content">
+        <div className="home-demo-content">
+            <div className="container-demo-extra-content">
                 <svg width="190" height="6" viewBox="0 0 190 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 3L150 3.00001" stroke="#222222" stroke-width="5" stroke-linecap="round"/>
-                    <path d="M161 3H171" stroke="#222222" stroke-width="5" stroke-linecap="round"/>
-                    <path d="M182 3H187" stroke="#222222" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M3 3L150 3.00001" stroke="#222222" strokeWidth="5" strokeLinecap="round"/>
+                    <path d="M161 3H171" stroke="#222222" strokeWidth="5" strokeLinecap="round"/>
+                    <path d="M182 3H187" stroke="#222222" strokeWidth="5" strokeLinecap="round"/>
                 </svg>
                 <p>Social Network</p>
             </div>
-            <div className="container-introduction-content">
+            <div className="container-demo-content-title">
                 Vote <span>trending</span>, follow and analysis
             </div>
+            <div className="container-demo-content">
+                The free social network allows users to vote on social trends, monitor and make their choices based on
+                <b> trenalys</b>' self-analysis and evaluation system.
+            </div>
+            <HomeDemoButtons/>
         </div>
     );
 
 }
 
-export function HomeLogin({setToken}) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-
-    const loginUser = async () => {
-        try {
-            const response = await axios.post(
-                'http://localhost:8000',
-                {
-                    username: username,
-                    password: password
-                },
-                {
-                    withCredentials: true, // Gửi cookie và thông tin xác thực
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-            if (response.data.success) {
-                console.log('Login success:', response.data);
-            } else {
-                console.log('Login failed:', response.data);
-            }
-            const token = response.data.token;
-            setToken(token);
-
-        } catch (error) {
-            console.error('Login failed:', error);
-        }
-    };
-
+export function HomeDemoImage() {
     return (
-        <div className="home-login">
-            <div className="container-login">
-                <input
-                    type="text"
-                    placeholder="Gmail"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </div>
-            <div className="container-login-and-register">
-                <button className="button-radius login-button" onClick={loginUser}>Log in</button>
-                <button className="button-radius register-button">Register</button>
-            </div>
+        <div className="home-demo-image">
+            <img src={'/img/trenalys-demo.png'} alt={'trenalys-demo'}/>
         </div>
     );
-};
+}
 
-export function HomeMain() {
-    return(
+export function HomeDemoButtons() {
+    return (
+        <div className="home-demo-buttons">
+            <Link to={'/login'} className="button-radius login-button">Login</Link>
+            <Link to={'/register'} className="button-radius register-button">Register</Link>
+        </div>
+    );
+
+}
+
+export function HomeDemo() {
+    return (
+        <div className="home-demo">
+            <HomeDemoContent/>
+            <HomeDemoImage/>
+        </div>
+    );
+
+}
+
+export function HomeMain({signType}) {
+    return (
         <div className="home-main">
-            <HomeIntroductionContent/>
-            <HomeLogin/>
+            <HomeDemo/>
+            {/*{signType === "login" ? <LoginEngine/> : <RegisterEngine/>}*/}
         </div>
     )
 }
-export function HomeComponent() {
+
+export function HomeComponent({signType}) {
     const [token, setToken] = useState();
     if (!token) {
         return (
             <div className="home-component">
-                    <HeaderTop/>
-                    <HomeMain/>
+                <HeaderTop/>
+                <HomeMain signType={signType}/>
             </div>
         );
     }
     return (
         <DashboardComponent/>
     )
-    return (
-        <div className="home-component">
-            <HeaderTop/>
-            <HomeIntroductionContent/>
-            <HomeLogin/>
-        </div>
-    );
 }

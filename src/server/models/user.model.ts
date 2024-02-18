@@ -9,13 +9,6 @@ const queryCreateTable = `
     password VARCHAR(255)
 );
 `;
-client.query(queryCreateTable, (err, res) => {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    console.log('Table is successfully created');
-});
 
 export class UserManager {
     static async createUser(email: string, name: string, password: string): Promise<void> {
@@ -51,9 +44,9 @@ export class UserManager {
             console.error('Error fetching users:', error);
         }
     }
-    static async loginUser(email: string, password: string): Promise<boolean> {
-        const loginQuery = 'SELECT * FROM users WHERE email = $1 AND password = $2';
-        const loginValues = [email, password];
+    static async loginUser(gmail: string, password: string): Promise<boolean> {
+        const loginQuery = 'SELECT * FROM users WHERE gmail = $1 AND password = $2';
+        const loginValues = [gmail, password];
 
         try {
             const loginResult = await client.query(loginQuery, loginValues);

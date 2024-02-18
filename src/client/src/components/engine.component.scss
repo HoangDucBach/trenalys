@@ -1,0 +1,82 @@
+@import "../scss/_variables.scss";
+// SIGN ENGINE
+.login-engine,
+.register-engine {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-normal;
+}
+
+.container-login {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-normal;
+  width: 100%;
+}
+
+.container-input {
+  display: flex;
+  flex-direction: column;
+  background-color: $color-01;
+  padding: $padding-normal;
+  border-radius: $radius-normal;
+  width: 400px;
+
+  & .input-title {
+    font-weight: 600;
+  }
+}
+
+.login-button {
+  background-color: $color-30;
+  border: none;
+  color: $color-60;
+  padding: 15px 15px;
+  font-weight: 600;
+}
+
+.register-button {
+  background-color: transparent;
+  border: 1px solid $color-30;
+  color: $color-30;
+  padding: 15px 15px;
+  font-weight: 600;
+
+}
+
+.container-login-and-register {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+
+  & p {
+    color: $color-05;
+  }
+
+  & a {
+    color: $color-30;
+    font-weight: 700;
+  }
+}
+
+.container-input-code {
+  display: flex;
+  flex-direction: row;
+  background-color: transparent;
+  justify-content: space-between;
+  width: 100%;
+}
+.input-code {
+  &::-moz-range-thumb {
+    visibility: hidden;
+  }
+  width: 40px;
+  text-align: center;
+  height: 50px;
+  border: 1px solid $color-30;
+    border-radius: $radius-normal;
+}

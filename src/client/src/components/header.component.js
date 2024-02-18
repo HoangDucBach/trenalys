@@ -1,17 +1,18 @@
 import {SVGLogo} from "./global.component";
 import "./header.component.scss";
+import {Link} from "react-router-dom";
 
 export function HeaderTop() {
     return (
         <div className="header-top">
-            <div className="container-logo">
+            <Link to={'/'} className="container-logo">
                 <div className="logo-img">
                     <SVGLogo/>
                 </div>
                 <div className="logo-title">
                     Trenalys
                 </div>
-            </div>
+            </Link>
             <div className="container-menu">
                 <div className="menu-item">
                     <a href={'/'}>Home</a>
