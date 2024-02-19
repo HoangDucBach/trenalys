@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import loginRoute from "./routes/login.route";
 import registerRoute from "./routes/register.route";
 export const app = express();
-const port = process.env.PORT_SERVER || 8000;
+const port = process.env.PORT || 8000;
 config();
 app.use(cors({
     origin: 'http://localhost:3000',
