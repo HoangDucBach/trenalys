@@ -3,7 +3,6 @@ import axios from "axios";
 import './engine.component.scss';
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-
 export function LoginEngine() {
     const [gmail, setGmail] = useState('');
     const [password, setPassword] = useState('');
@@ -17,7 +16,7 @@ export function LoginEngine() {
             password: password
         }
         axios
-            .post(`/login`, loginData)
+            .post(`${process.env.REACT_APP_SERVER_URL}/login`, loginData)
             .then(res => {
                 console.log('Login success:', res.data);
                 setLoginStatus(true);
@@ -95,7 +94,7 @@ export function RegisterEngine() {
             password: password
         }
         axios
-            .post(`/register`, registerData)
+            .post(`${process.env.REACT_APP_SERVER_URL}/register`, registerData)
             .then(res => {
                 console.log('Register success:', res.data);
                 setRegisterStatus(true);
@@ -109,7 +108,7 @@ export function RegisterEngine() {
         });
     };
     const sendCode = async () => {
-        axios.post(`/register`, {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/register`, {
             action: 'sendCode',
             gmail: gmail
         }).then(res => {
