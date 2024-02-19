@@ -28,12 +28,27 @@
   }
 }
 
-.login-button {
-  background-color: $color-30;
+.container-input-code-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-radius.button-send-code {
+  background-color: $color-05;
   border: none;
   color: $color-60;
   padding: 15px 15px;
+  width: fit-content;
+}
+
+.login-button {
+  background-color: $color-30;
+  color: $color-60;
+  padding: 15px 15px;
   font-weight: 600;
+  border-radius: $radius-normal;
 }
 
 .register-button {
@@ -70,13 +85,11 @@
   justify-content: space-between;
   width: 100%;
 }
+
 .input-code {
-  &::-moz-range-thumb {
-    visibility: hidden;
-  }
-  width: 40px;
-  text-align: center;
-  height: 50px;
-  border: 1px solid $color-30;
-    border-radius: $radius-normal;
+  text-align: left;
+  letter-spacing: 35.5px;
+  text-transform: uppercase;
+  padding: 0 0 0 12px;
 }
+

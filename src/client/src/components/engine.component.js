@@ -35,7 +35,7 @@ export function LoginEngine() {
                 <div className="title">
                     Login
                 </div>
-                {loginStatus === false && <p className="home-login-incorrect-message">Incorrect Gmail or password.</p>}
+                {loginStatus === false && <p className="error-message">Incorrect Gmail or password.</p>}
                 <div className="container-input">
                     <div className="input-title">
                         Gmail
@@ -52,7 +52,7 @@ export function LoginEngine() {
                         Password
                     </div>
                     <input
-                        type="text"
+                        type="password"
                         placeholder="Type your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}

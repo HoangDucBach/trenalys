@@ -1,7 +1,8 @@
 import logo from './logo.svg';
-import { HomeComponent } from "./components/home.component";
+import {HomeComponent} from "./components/home.component";
 import './scss/_global.scss';
-
+import {Provider} from "react-redux";
+import {store} from "./redux/store";
 import {
     BrowserRouter,
     Routes,
@@ -12,22 +13,24 @@ import {
 
 function App() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <div>
-                            <Outlet />
-                        </div>
-                    }
-                >
-                    <Route path="/" element={<HomeComponent signType="login" />} />
-                    <Route path="login" element={<HomeComponent signType="login" />} />
-                    <Route path="register" element={<HomeComponent signType="register" />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
+        <Provider store={store}>
+            <BrowserRouter>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <div>
+                                <Outlet/>
+                            </div>
+                        }
+                    >
+                        <Route path="/" element={<HomeComponent signType="login"/>}/>
+                        <Route path="login" element={<HomeComponent signType="login"/>}/>
+                        <Route path="register" element={<HomeComponent signType="register"/>}/>
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </Provider>
     );
 }
 

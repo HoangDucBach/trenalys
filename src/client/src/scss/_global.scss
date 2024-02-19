@@ -33,7 +33,16 @@ body {
   font-weight: 700;
   color: $color-30;
 }
-
+.incorrect-message {
+  font-size: $size-text-normal;
+  font-weight: 500;
+  color: $color-error;
+}
+.success-message {
+  font-size: $size-text-normal;
+  font-weight: 500;
+  color: $color-success;
+}
 img {
   width: 100%;
   height: auto;
