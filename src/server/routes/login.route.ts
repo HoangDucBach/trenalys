@@ -2,6 +2,7 @@ import express from "express";
 import {UserManager} from "../models/user.model";
 import {app} from "../app";
 import {transporter} from "../utils/verify.util";
+import {MathUtil} from "../utils/math.util";
 
 const router = express.Router();
 router.post('/', async (req, res) => {
@@ -33,10 +34,5 @@ router.post('/', async (req, res) => {
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
     }
-});
-router.post('/register', async (req, res) => {
-    const {gmail, password} = req.body;
-    console.log(gmail, password);
-    console.log(req.body);
 });
 export default router;

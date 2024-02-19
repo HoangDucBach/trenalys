@@ -5,6 +5,7 @@ import "./home.component.scss";
 import "./engine.component.scss";
 import {LoginEngine, RegisterEngine} from "./engine.component";
 import {Link, useLocation} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 export function HomeDemoContent() {
     const location = useLocation();
@@ -72,18 +73,17 @@ export function HomeDemo() {
 
 }
 
-export function HomeMain({signType}) {
+export function HomeMain() {
     return (
         <div className="home-main">
             <HomeDemo/>
-            {/*{signType === "login" ? <LoginEngine/> : <RegisterEngine/>}*/}
         </div>
     )
 }
 
 export function HomeComponent({signType}) {
-    const [token, setToken] = useState();
-    if (!token) {
+    const isLogged = useSelector(state => state.status.isLogged);
+    if (!isLogged) {
         return (
             <div className="home-component">
                 <HeaderTop/>
