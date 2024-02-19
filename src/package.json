@@ -8,9 +8,9 @@
     "client-install": "cd client && npm install",
     "server-install": "cd server && npm install",
     "install": "concurrently \"npm run server-install\" \"npm run client-install\"",
-    "start": "concurrently \"npm run server-start\" \"npm run client-start\"",
+    "start": "npm install && concurrently \"npm run server-start\" \"npm run client-start\"",
     "server-start": "cd server && npm start",
-    "client-start": "cd client && npm start"
+    "client-start": "cd client && npm start",
   }
 
 }
