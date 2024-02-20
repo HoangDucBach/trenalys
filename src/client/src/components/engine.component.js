@@ -94,7 +94,7 @@ export function RegisterEngine() {
             password: password
         }
         axios
-            .post(`/register`, registerData)
+            .post(`${process.env.REACT_APP_SERVER_URL}/register`, registerData)
             .then(res => {
                 console.log('Register success:', res.data);
                 setRegisterStatus(true);
@@ -108,7 +108,7 @@ export function RegisterEngine() {
         });
     };
     const sendCode = async () => {
-        axios.post(`/register`, {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/register`, {
             action: 'sendCode',
             gmail: gmail
         }).then(res => {
