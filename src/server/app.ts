@@ -9,7 +9,7 @@ export const app = express();
 const port = process.env.PORT || 8000;
 config();
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://trenalys.vercel.app',
     credentials: true,
 }));
 app.use(express.json());

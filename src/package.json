@@ -11,6 +11,7 @@
     "start": "concurrently \"npm run server-start\" \"npm run client-start\"",
     "server-start": "cd server && npm run dev",
     "client-start": "cd client && npm start"
+
   }
 
 }
