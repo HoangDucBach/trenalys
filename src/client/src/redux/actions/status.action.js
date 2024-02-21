@@ -4,3 +4,10 @@ export const checkLogin = (isLogged) => {
         isLogged
     }
 }
+export const login = (gmail, password) => {
+    return {
+        type:"LOGIN",
+        gmail: gmail,
+        password: password,
+    }
+}

@@ -5,11 +5,12 @@ import http from 'http';
 import cookieParser from 'cookie-parser';
 import loginRoute from "./routes/login.route";
 import registerRoute from "./routes/register.route";
+import {configEnvironment} from "./config";
 export const app = express();
+config({path:`./.env.${configEnvironment.PATH_CONFIG_ENV}`});
 const port = process.env.PORT || 8000;
-config();
 app.use(cors({
-    origin: 'https://trenalys.vercel.app',
+    origin: process.env.URL_CLIENT,
     credentials: true,
 }));
 app.use(express.json());

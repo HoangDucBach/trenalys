@@ -1,5 +1,5 @@
 @import "../scss/_variables.scss";
-
+// HEADER TOP
 .header-top {
   display: flex;
   flex-direction: row;
@@ -37,3 +37,29 @@
     color: $color-05;
   }
 }
+
+// HEADER LEFT
+.header-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: $padding-normal;
+  border-right: 1px solid $color-05;
+
+  .container-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    & .menu-item a {
+      font-size: $size-text-small;
+      color: $color-30;
+    }
+  }
+
+}
+

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import {HomeComponent} from "./components/home.component";
 import './scss/_global.scss';
 import {Provider} from "react-redux";
@@ -7,9 +6,9 @@ import {
     BrowserRouter,
     Routes,
     Route,
-    Link,
     Outlet,
 } from "react-router-dom";
+import {DashboardComponent, DashboardHomeComponent} from "./components/dashboard.component";
 
 function App() {
     return (
@@ -18,15 +17,15 @@ function App() {
                 <Routes>
                     <Route
                         path="/"
-                        element={
-                            <div>
-                                <Outlet/>
-                            </div>
-                        }
+                        element={<Outlet/>}
                     >
                         <Route path="/" element={<HomeComponent signType="login"/>}/>
                         <Route path="login" element={<HomeComponent signType="login"/>}/>
                         <Route path="register" element={<HomeComponent signType="register"/>}/>
+
+                        <Route path="dashboard" element={<Outlet/>}>
+                            <Route path="home" element={<DashboardHomeComponent/>}/>
+                        </Route>
                     </Route>
                 </Routes>
             </BrowserRouter>

@@ -21,6 +21,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 100px;
+  padding: $padding-normal;
   width: 100%;
 
   &:active {
@@ -33,16 +34,35 @@ body {
   font-weight: 700;
   color: $color-30;
 }
+
 .incorrect-message {
   font-size: $size-text-normal;
   font-weight: 500;
   color: $color-error;
 }
+
 .success-message {
   font-size: $size-text-normal;
   font-weight: 500;
   color: $color-success;
 }
+
+.menu-item-img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+}
+
+.component {
+  border: 1px solid $color-05;
+  border-radius: $radius-normal;
+  background-color: $color-01;
+  padding: $padding-normal;
+
+}
+
 img {
   width: 100%;
   height: auto;

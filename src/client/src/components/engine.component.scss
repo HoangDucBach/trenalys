@@ -93,3 +93,145 @@
   padding: 0 0 0 12px;
 }
 
+// SEARCH ENGINE
+.container-search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+// SORT ENGINE
+.container-sort {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// SURVEY ENGINE
+.survey-engine {
+  background-color: $color-30;
+  color: $color-60;
+
+  font-size: $size-text-normal;
+  font-weight: 600;
+}
+
+// TREND CARD ENGINE
+.trend-card-engine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-normal;
+  padding: $padding-normal;
+  border-radius: $radius-normal;
+  background-color: $color-01;
+  border: 1px solid $color-05;
+  width: 300px;
+  height: 350px;
+}
+
+.container-trend-id {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+
+  background-color: rgba(171, 171, 171, 0.25);
+  padding: 10px $padding-normal;
+  border-radius: $radius-normal;
+
+  & .trend-id {
+    font-size: $size-text-normal;
+    font-weight: 500;
+    color: $color-05;
+  }
+}
+
+.container-trend-description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-normal;
+  width: 100%;
+  height: 100%;
+
+  .container-trend-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-normal;
+    width: 100%;
+
+    & .trend-title {
+      font-size: $size-text-large;
+      font-weight: 600;
+      color: $color-30;
+    }
+
+    & .trend-follow-button {
+      border: none;
+      padding: 10px 15px;
+      width: fit-content;
+      background-color: $color-30;
+      color: $color-60;
+      font-weight: 600;
+    }
+  }
+}
+
+.container-trend-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.container-trend-detail-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: $spacing-normal;
+
+  & .trend-detail-item__title,
+  .trend-detail-item__value {
+    font-size: $size-text-normal;
+    color: $color-05;
+  }
+}
+
+.container-trend-voted {
+  & .trend-voted {
+    font-size: $size-text-xxlarge;
+    font-weight: 600;
+    color: $color-30;
+  }
+}
+
+.container-trend-tags {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+// TREND TAG
+.component.trend-tag {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $color-30;
+  color: $color-60;
+  border: none;
+  border-radius: $radius-small;
+  padding: 5px 5px;
+}

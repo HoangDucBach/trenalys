@@ -1,10 +1,10 @@
 import {HeaderTop} from "./header.component";
 import {useState} from "react";
-import {DashboardComponent} from "./dashboard.component";
+import {DashboardComponent, DashboardHomeComponent} from "./dashboard.component";
 import "./home.component.scss";
 import "./engine.component.scss";
 import {LoginEngine, RegisterEngine} from "./engine.component";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 
 export function HomeDemoContent() {
@@ -83,6 +83,7 @@ export function HomeMain() {
 
 export function HomeComponent({signType}) {
     const isLogged = useSelector(state => state.status.isLogged);
+    const navigate = useNavigate();
     if (!isLogged) {
         return (
             <div className="home-component">
@@ -91,7 +92,5 @@ export function HomeComponent({signType}) {
             </div>
         );
     }
-    return (
-        <DashboardComponent/>
-    )
+    navigate("/dashboard/home");
 }
