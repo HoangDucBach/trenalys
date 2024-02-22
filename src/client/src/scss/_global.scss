@@ -40,7 +40,10 @@ body {
   font-weight: 500;
   color: $color-error;
 }
-
+.container{
+  display: flex;
+  width: 100%;
+}
 .success-message {
   font-size: $size-text-normal;
   font-weight: 500;

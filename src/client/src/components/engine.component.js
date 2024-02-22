@@ -4,10 +4,9 @@ import './engine.component.scss';
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 
-export function InputEngine({type,title, placeholder, value, setValue}) {
+export function InputEngine({type, title, placeholder, value, setValue}) {
     return (
-        <div className="input-engine">
-
+        <div className="input-engine component">
             <div className="container-input">
                 <div className="input-title">
                     {title}
@@ -57,28 +56,20 @@ export function LoginEngine() {
                     Login
                 </div>
                 {loginStatus === false && <p className="error-message">Incorrect Gmail or password.</p>}
-                <div className="container-input">
-                    <div className="input-title">
-                        Gmail
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Type your gmail"
-                        value={gmail}
-                        onChange={(e) => setGmail(e.target.value)}
-                    />
-                </div>
-                <div className="container-input">
-                    <div className="input-title">
-                        Password
-                    </div>
-                    <input
-                        type="password"
-                        placeholder="Type your password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
+                <InputEngine
+                    title='Gmail'
+                    type='text'
+                    placeholder='Type your gmail'
+                    value={gmail}
+                    setValue={setGmail}
+                />
+                <InputEngine
+                    title='Password'
+                    type='password'
+                    placeholder='Type your password'
+                    value={password}
+                    setValue={setPassword}
+                />
             </div>
             <div className="container-login-and-register">
                 <button className="button-radius login-button" onClick={loginUser}>Log in</button>
@@ -249,7 +240,7 @@ export function SortEngine() {
                 <div className="drop-list-img">
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 10.625L12.25 17.375L5.5 10.625" stroke="#222222" stroke-width="2.25"
-                              stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                              strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
                         <circle cx="12.5" cy="12.5" r="12" stroke="#222222"/>
                     </svg>
 
@@ -259,14 +250,79 @@ export function SortEngine() {
     );
 }
 
-export function SurveyEngine() {
+export function SurveyFormEngine() {
+    const [trendTitle, setTrendTitle] = useState('');
+    const [trendDescription, setTrendDescription] = useState('');
+    const [trendTags, setTrendTags] = useState('');
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const formData = {
+            trendTitle: trendTitle,
+            trendDescription: trendDescription,
+            trendTimeCreated: new Date().toISOString(),
+        };
+
+        try {
+            const postUrl = `${process.env.REACT_APP_SERVER_URL}/dashboard/home/create-trend-form`;
+
+            const response = await axios.post(postUrl, formData);
+            if (response.status !== 200) {
+                throw new Error('Failed to submit form');
+            }
+            console.log('Form submitted successfully:', response.data);
+        } catch (error) {
+            console.error('Error submitting form:', error.message);
+        }
+    };
     return (
-        <div className="button-radius survey-engine">
-            Survey Engine
+        <div className="survey-form-engine component">
+            <form className="container-survey-form" onSubmit={handleSubmit}>
+                <div className="survey-form-title title">
+                    Create Survey Form
+                </div>
+                <div className="container-survey-form-item">
+                    <InputEngine
+                        title='Title'
+                        type='text'
+                        placeholder='Type your survey title'
+                        value={trendTitle}
+                        setValue={setTrendTitle}
+                        className="component"
+                    />
+                </div>
+                <div className="container-survey-form-item">
+                    <InputEngine
+                        title='Description'
+                        type='text'
+                        placeholder='Type your survey description'
+                        value={trendDescription}
+                        setValue={setTrendDescription}
+                    />
+                </div>
+                <div className="container-survey-form-item">
+                    <input type="submit" className="button-radius"/>
+                    <button className="button-radius">Cancel</button>
+                </div>
+            </form>
         </div>
-    )
+    );
 }
 
+export function SurveyEngine() {
+    const [isFormAvailable, setIsFormAvailable] = useState(false);
+    return (
+        <>
+            <div
+                className="button-radius survey-engine"
+                onClick={() => setIsFormAvailable(!isFormAvailable)}
+            >
+                Survey Engine
+            </div>
+            {isFormAvailable && <SurveyFormEngine/>}
+        </>
+    )
+}
 
 export function TrendTag({tag}) {
     return (
@@ -279,9 +335,9 @@ export function TrendTag({tag}) {
 
 export function TrendCardEngine({trend, user}) {
     const id = trend.id;
-    const title = trend.title;
+    const title = trend.name;
     const description = trend.description;
-    const trendTags = trend.trendTags;
+    // const trendTags = trend.trendTags;
     const numberOfVotes = trend.numberOfVotes;
     const timeCreated = trend.timeCreated;
 
@@ -306,24 +362,6 @@ export function TrendCardEngine({trend, user}) {
                 </div>
             </div>
             <div className="container-trend-graph">
-                {/*<svg width="250" height="100%" viewBox="0 0 250 69" fill="none" xmlns="http://www.w3.org/2000/svg">*/}
-                {/*    <path d="M0 29.2361C0 26.4747 2.23858 24.2361 5 24.2361H15.0786C17.84 24.2361 20.0786 26.4747 20.0786 29.2361V63.6664C20.0786 66.4278 17.84 68.6664 15.0786 68.6664H5C2.23858 68.6664 0 66.4278 0 63.6664V29.2361Z" fill="#222222"/>*/}
-                {/*    <path d="M25.5464 14.582C25.5464 11.8206 27.785 9.58203 30.5464 9.58203H40.625C43.3864 9.58203 45.625 11.8206 45.625 14.582V63.6666C45.625 66.428 43.3864 68.6666 40.625 68.6666H30.5464C27.785 68.6666 25.5464 66.428 25.5464 63.6666V14.582Z" fill="#222222"/>*/}
-                {/*    <path d="M51.0938 11.6979C51.0938 8.93645 53.3323 6.69788 56.0937 6.69788H66.1724C68.9338 6.69788 71.1724 8.93645 71.1724 11.6979V63.6665C71.1724 66.4279 68.9338 68.6665 66.1724 68.6665H56.0938C53.3323 68.6665 51.0938 66.4279 51.0938 63.6665V11.6979Z" fill="#222222"/>*/}
-                {/*    <path d="M76.6406 4.99438C76.6406 2.23296 78.8792 -0.00561523 81.6406 -0.00561523H91.7192C94.4807 -0.00561523 96.7192 2.23296 96.7192 4.99438V63.6665C96.7192 66.4279 94.4807 68.6665 91.7192 68.6665H81.6406C78.8792 68.6665 76.6406 66.4279 76.6406 63.6665V4.99438Z" fill="#222222"/>*/}
-                {/*    <path d="M102.188 56.0503C102.188 53.2889 104.426 51.0503 107.188 51.0503H117.266C120.028 51.0503 122.266 53.2889 122.266 56.0503V63.6665C122.266 66.428 120.028 68.6665 117.266 68.6665H107.188C104.426 68.6665 102.188 66.428 102.188 63.6665V56.0503Z" fill="#222222"/>*/}
-                {/*    <path d="M127.734 9.90503C127.734 7.14361 129.973 4.90503 132.734 4.90503H142.813C145.574 4.90503 147.813 7.14361 147.813 9.90503V63.6664C147.813 66.4279 145.574 68.6664 142.813 68.6664H132.734C129.973 68.6664 127.734 66.4279 127.734 63.6664V9.90503Z" fill="#222222"/>*/}
-                {/*    <path d="M153.281 25.7285C153.281 22.9671 155.52 20.7285 158.281 20.7285H168.36C171.121 20.7285 173.36 22.9671 173.36 25.7285V63.6665C173.36 66.4279 171.121 68.6665 168.36 68.6665H158.281C155.52 68.6665 153.281 66.4279 153.281 63.6665V25.7285Z" fill="#222222"/>*/}
-                {/*    <path d="M178.828 54.2574C178.828 51.496 181.066 49.2574 183.828 49.2574H193.906C196.668 49.2574 198.906 51.496 198.906 54.2574V63.6665C198.906 66.4279 196.668 68.6665 193.906 68.6665H183.828C181.066 68.6665 178.828 66.4279 178.828 63.6665V54.2574Z" fill="#222222"/>*/}
-                {/*    <path d="M204.374 32.432C204.374 29.6706 206.613 27.432 209.374 27.432H219.453C222.214 27.432 224.453 29.6706 224.453 32.432V63.6665C224.453 66.4279 222.214 68.6665 219.453 68.6665H209.374C206.613 68.6665 204.374 66.4279 204.374 63.6665V32.432Z" fill="#222222"/>*/}
-                {/*    <path d="M229.922 8.34607C229.922 5.58465 232.16 3.34607 234.922 3.34607H245C247.762 3.34607 250 5.58465 250 8.34607V63.6664C250 66.4279 247.762 68.6664 245 68.6664H234.922C232.16 68.6664 229.922 66.4279 229.922 63.6664V8.34607Z" fill="#222222"/>*/}
-                {/*    <path d="M0 29.2361C0 26.4747 2.23858 24.2361 5 24.2361H15.0786C17.84 24.2361 20.0786 26.4747 20.0786 29.2361V63.6664C20.0786 66.4278 17.84 68.6664 15.0786 68.6664H5C2.23858 68.6664 0 66.4278 0 63.6664V29.2361Z" fill="#222222"/>*/}
-                {/*    <path d="M127.734 9.90503C127.734 7.14361 129.973 4.90503 132.734 4.90503H142.813C145.574 4.90503 147.813 7.14361 147.813 9.90503V63.6664C147.813 66.4279 145.574 68.6664 142.813 68.6664H132.734C129.973 68.6664 127.734 66.4279 127.734 63.6664V9.90503Z" fill="#222222"/>*/}
-                {/*    <path d="M153.281 25.7285C153.281 22.9671 155.52 20.7285 158.281 20.7285H168.36C171.121 20.7285 173.36 22.9671 173.36 25.7285V63.6665C173.36 66.4279 171.121 68.6665 168.36 68.6665H158.281C155.52 68.6665 153.281 66.4279 153.281 63.6665V25.7285Z" fill="#222222"/>*/}
-                {/*    <path d="M178.828 54.2574C178.828 51.496 181.066 49.2574 183.828 49.2574H193.906C196.668 49.2574 198.906 51.496 198.906 54.2574V63.6665C198.906 66.4279 196.668 68.6665 193.906 68.6665H183.828C181.066 68.6665 178.828 66.4279 178.828 63.6665V54.2574Z" fill="#222222"/>*/}
-                {/*    <path d="M229.922 8.34607C229.922 5.58465 232.16 3.34607 234.922 3.34607H245C247.762 3.34607 250 5.58465 250 8.34607V63.6664C250 66.4279 247.762 68.6664 245 68.6664H234.922C232.16 68.6664 229.922 66.4279 229.922 63.6664V8.34607Z" fill="#222222"/>*/}
-                {/*</svg>*/}
-
             </div>
             <div className="container-trend-detail">
                 <div className="container-trend-voted">
@@ -339,9 +377,9 @@ export function TrendCardEngine({trend, user}) {
                 </div>
             </div>
             <div className="container-trend-tags">
-                {
-                    trendTags.map(tag => <TrendTag tag={tag}/>)
-                }
+                {/*{*/}
+                {/*    trendTags.map(tag => <TrendTag tag={tag}/>)*/}
+                {/*}*/}
             </div>
 
         </div>

@@ -1,6 +1,7 @@
 @import "../scss/_variables.scss";
 
 .home-component {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100vh;

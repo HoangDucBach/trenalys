@@ -42,4 +42,9 @@
     flex: 1;
   }
 }
-
+.container-trend-card-engine {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: $spacing-normal;
+}
