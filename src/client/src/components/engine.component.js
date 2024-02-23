@@ -28,10 +28,11 @@ export function LoginEngine() {
     const [gmail, setGmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState(null);
-
+    const [isLogging, setIsLogging] = useState(false);
     const dispatch = useDispatch();
 
     const loginUser = async () => {
+        setIsLogging(true);
         const loginData = {
             gmail: gmail,
             password: password
@@ -42,10 +43,12 @@ export function LoginEngine() {
                 console.log('Login success:', res.data);
                 setLoginStatus(true);
                 dispatch({type: 'CHECK_LOGIN', payload: true});
-            }).catch(err => {
-            console.log('Login failed:', err);
-            setLoginStatus(false);
-        });
+            })
+            .catch(err => {
+                console.log('Login failed:', err);
+                setLoginStatus(false);
+            })
+            .finally(() => setIsLogging(false));
 
 
     };
@@ -72,7 +75,10 @@ export function LoginEngine() {
                 />
             </div>
             <div className="container-login-and-register">
-                <button className="button-radius login-button" onClick={loginUser}>Log in</button>
+                <button className="button-radius login-button loading-container-engine" onClick={loginUser}>
+                    Log in
+                    <LoadingEngine loading={isLogging}/>
+                </button>
                 <p>Don't have account? <Link to={'/register'}>Register</Link></p>
             </div>
 
@@ -89,7 +95,9 @@ export function RegisterEngine() {
     const [inputCode, setInputCode] = useState('');
     const [registerStatus, setRegisterStatus] = useState(null);
     const [code, setCode] = useState(null);
+    const [isRegistering, setIsRegistering] = useState(false);
     const registerUser = async () => {
+        setIsRegistering(true);
         console.log('Code:', code, 'Verify:', inputCode);
         if (password !== confirmPassword) {
             setRegisterError('Password and confirm password are not the same.');
@@ -194,7 +202,10 @@ export function RegisterEngine() {
                 </div>
             </div>
             <div className="container-login-and-register">
-                <button className="button-radius login-button" onClick={registerUser}>Register</button>
+                <button className="button-radius login-button" onClick={registerUser}>
+                    Register
+                    <LoadingEngine loading={isRegistering}/>
+                </button>
                 <p>Already have your account. <Link to={'/login'}>Login</Link></p>
             </div>
 
@@ -254,6 +265,7 @@ export function SurveyFormEngine({setIsFormAvailable}) {
     const [trendTitle, setTrendTitle] = useState('');
     const [trendDescription, setTrendDescription] = useState('');
     const [trendTags, setTrendTags] = useState('');
+    const [submitting, setSubmitting] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -303,8 +315,8 @@ export function SurveyFormEngine({setIsFormAvailable}) {
                     />
                 </div>
                 <div className="container-survey-form-item">
-                    <input type="submit" className="button-radius"/>
-                    <button className="button-radius">Cancel</button>
+                    <button className="button-radius button-cancel-survey">Cancel</button>
+                    <input type="submit" className="button-radius button-submit-survey"/>
                 </div>
             </form>
         </div>
@@ -388,4 +400,14 @@ export function TrendCardEngine({trend, user}) {
         </div>
     );
 
+}
+
+export function LoadingEngine({loading}) {
+    if (!loading) {
+        return null;
+    }
+    return (
+        <div className="loading-engine">
+        </div>
+    )
 }
