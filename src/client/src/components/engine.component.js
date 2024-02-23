@@ -344,6 +344,7 @@ export function TrendCardEngine({trend, user}) {
     const timeCreated = trend.timeCreated;
 
     // const isFollowed = user.followedTrends.includes(id);
+    // const isFollowed = user.followedTrends.includes(id);
 
     return (
         <div className="trend-card-engine component">
