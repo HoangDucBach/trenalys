@@ -1,7 +1,27 @@
 @import "../scss/_variables.scss";
+// LOADING ENGINE
+.loading-engine {
+  width: 30px;
+  height: 30px;
+  border: 5px solid #D9D9D9;
+  border-top: 5px solid #878585;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
 // INPUT ENGINE
 .component.input-engine {
   padding: $padding-xsmall $padding-xsmall;
+  width: 100%;
 }
 
 // SIGN ENGINE
@@ -141,6 +161,7 @@
   height: 100%;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
 }
 
 .survey-engine {
@@ -149,6 +170,28 @@
 
   font-size: $size-text-normal;
   font-weight: 600;
+}
+
+.button-submit-survey {
+  background-color: $color-30;
+  color: $color-60;
+  padding: 15px 15px;
+  font-weight: 600;
+  border-radius: $radius-normal;
+  box-shadow: 0 0 8px 3px rgba(171, 171, 171, 0.75);;
+}
+
+.button-radius.button-cancel-survey {
+  background-color: transparent;
+  border: 1px solid $color-30;
+  color: $color-30;
+}
+
+.container-survey-form-item {
+  display: flex;
+  justify-content: space-between;
+  gap: $spacing-normal;
+  width: 100%;
 }
 
 // TREND CARD ENGINE
