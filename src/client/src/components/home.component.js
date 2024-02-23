@@ -1,5 +1,5 @@
 import {HeaderTop} from "./header.component";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {DashboardComponent, DashboardHomeComponent} from "./dashboard.component";
 import "./home.component.scss";
 import "./engine.component.scss";
@@ -84,13 +84,17 @@ export function HomeMain() {
 export function HomeComponent({signType}) {
     const isLogged = useSelector(state => state.status.isLogged);
     const navigate = useNavigate();
-    if (!isLogged) {
-        return (
-            <div className="home-component">
-                <HeaderTop/>
-                <HomeMain signType={signType}/>
-            </div>
-        );
-    }
-    navigate("/dashboard/home");
+
+    useEffect(() => {
+        if (isLogged) {
+            navigate("/dashboard/home");
+        }
+    }, [isLogged, navigate]);
+
+    return (
+        <div className="home-component">
+            <HeaderTop />
+            <HomeMain signType={signType} />
+        </div>
+    );
 }

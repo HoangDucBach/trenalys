@@ -4,6 +4,9 @@ import {Bar} from "react-chartjs-2";
 import {SearchEngine, SortEngine, SurveyEngine, TrendCardEngine} from "./engine.component";
 import axios from "axios";
 import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import RequireLoginComponent from "./require.component";
 
 export function DashboardHeaderTop({title}) {
     return (
@@ -70,12 +73,14 @@ export function DashboardHomeMain() {
 
 export function DashboardComponent({children}) {
     return (
-        <div className="dashboard">
-            <HeaderLeft/>
-            <div className="dashboard-main">
-                {children}
+        <RequireLoginComponent>
+            <div className="dashboard">
+                <HeaderLeft/>
+                <div className="dashboard-main">
+                    {children}
+                </div>
             </div>
-        </div>
+        </RequireLoginComponent>
     );
 }
 

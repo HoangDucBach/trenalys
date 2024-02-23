@@ -6,6 +6,7 @@ import loginRoute from "./routes/login.route";
 import registerRoute from "./routes/register.route";
 import {configEnvironment} from "./config";
 import dashboardRoute from "./routes/dashboard.route";
+import globalRoute from "./routes/global.route";
 export const app = express();
 config({path:`./.env.${configEnvironment.PATH_CONFIG_ENV}`});
 const port = process.env.PORT || 8000;
@@ -16,7 +17,8 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
+app.use('/', globalRoute);
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
-app.use('/dashboard',dashboardRoute);
+app.use('/dashboard', dashboardRoute);
 app.listen(port);

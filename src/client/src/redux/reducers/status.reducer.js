@@ -1,8 +1,8 @@
 const initialState = {
     isLogged: false,
-    gmail: '',
-    password: '',
-
+    gmail: null,
+    password: null,
+    isConnected: false
 }
 
 export function statusReducer(state = initialState, action) {
@@ -17,7 +17,22 @@ export function statusReducer(state = initialState, action) {
                 ...state,
                 gmail: action.payload.gmail,
                 password: action.payload.password
-            }
+            };
+        case 'LOGOUT':
+            return {
+                ...state,
+                isLogged: false
+            };
+        case 'CONNECT':
+            return {
+                ...state,
+                isConnected: true
+            };
+        case 'DISCONNECT':
+            return {
+                ...state,
+                isConnected: false
+            };
         default:
             return state;
     }

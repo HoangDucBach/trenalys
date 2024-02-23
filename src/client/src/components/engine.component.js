@@ -250,7 +250,7 @@ export function SortEngine() {
     );
 }
 
-export function SurveyFormEngine() {
+export function SurveyFormEngine({setIsFormAvailable}) {
     const [trendTitle, setTrendTitle] = useState('');
     const [trendDescription, setTrendDescription] = useState('');
     const [trendTags, setTrendTags] = useState('');
@@ -271,6 +271,8 @@ export function SurveyFormEngine() {
                 throw new Error('Failed to submit form');
             }
             console.log('Form submitted successfully:', response.data);
+            await window.location.reload();
+            await setIsFormAvailable(false);
         } catch (error) {
             console.error('Error submitting form:', error.message);
         }
@@ -319,7 +321,7 @@ export function SurveyEngine() {
             >
                 Survey Engine
             </div>
-            {isFormAvailable && <SurveyFormEngine/>}
+            {isFormAvailable && <SurveyFormEngine setIsFormAvailable={setIsFormAvailable}/>}
         </>
     )
 }

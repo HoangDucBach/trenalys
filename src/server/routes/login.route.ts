@@ -6,7 +6,6 @@ router.post('/', async (req, res) => {
     const {gmail, password} = req.body;
     console.log(gmail, password);
     console.log(req.body);
-
     try {
         const status = await UserManager.loginUser(gmail, password);
         if (status) {

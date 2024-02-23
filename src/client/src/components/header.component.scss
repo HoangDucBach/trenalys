@@ -1,6 +1,9 @@
 @import "../scss/_variables.scss";
 // HEADER TOP
 .header-top {
+  // || POSITION
+
+  // || STRUCTURE
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -10,6 +13,9 @@
 }
 
 .container-logo {
+  // || POSITION
+
+  // || STRUCTURE
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -17,6 +23,7 @@
   gap: 20px;
 
   & .logo-title {
+    // || TYPOGRAPHY
     font-size: $size-text-xlarge;
     font-weight: 900;
     color: $color-30;
@@ -24,6 +31,7 @@
 }
 
 .container-menu {
+  // ||STRUCTURE
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -32,6 +40,8 @@
 
   & .menu-item a {
     all: unset;
+
+    // || TYPOGRAPHY
     font-size: $size-text-normal;
     font-weight: 500;
     color: $color-05;
@@ -40,6 +50,7 @@
 
 // HEADER LEFT
 .header-left {
+  // || POSITION
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -49,6 +60,7 @@
   border-right: 1px solid $color-05;
 
   .container-menu {
+    // || STRUCTURE
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -56,6 +68,7 @@
     gap: 20px;
 
     & .menu-item a {
+      // || TYPOGRAPHY
       font-size: $size-text-small;
       color: $color-30;
     }

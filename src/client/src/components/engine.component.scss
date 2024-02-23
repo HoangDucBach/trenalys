@@ -275,3 +275,52 @@
   border-radius: $radius-small;
   padding: 5px 5px;
 }
+
+.example-class {
+  // || POSITION
+  position: unset;
+  top: unset;
+  right: unset;
+  left: unset;
+  bottom: unset;
+  align-self: unset;
+
+  // || STRUCTURE
+  display: unset;
+  align-items: unset;
+  justify-content: unset;
+  gap: unset;
+  flex-direction: unset;
+  flex-wrap: unset;
+  flex-grow: unset;
+  flex-shrink: unset;
+  flex-basis: unset;
+
+
+  // || TYPOGRAPHY
+  font-weight: unset;
+  font-size: unset;
+  color: unset;
+  font-family: inherit;
+  text-align: unset;
+  text-transform: unset;
+  word-break: inherit;
+  letter-spacing: unset;
+  line-height: unset;
+  text-decoration: unset;
+  text-overflow: unset;
+
+  // || DECORATION
+  border: unset;
+  border-radius: unset;
+  padding: unset;
+  margin: unset;
+  width: unset;
+  height: unset;
+  background-color: unset;
+  box-shadow: unset;
+  overflow: unset;
+  cursor: unset;
+  z-index: unset;
+  opacity: unset;
+}
