@@ -15,7 +15,8 @@ app.use(cors({
     origin: process.env.URL_CLIENT,
     credentials: true,
 }));
-
+console.log(app.get('env'));
+console.log(process.env.URL_CLIENT);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
