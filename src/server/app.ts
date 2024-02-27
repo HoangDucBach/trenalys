@@ -7,13 +7,15 @@ import registerRoute from "./routes/register.route";
 import {configEnvironment} from "./config";
 import dashboardRoute from "./routes/dashboard.route";
 import globalRoute from "./routes/global.route";
+import path from "path";
 export const app = express();
-config({path:`./.env.${configEnvironment.PATH_CONFIG_ENV}`});
+config({path: path.resolve(__dirname, `./.env.${configEnvironment.PATH_CONFIG_ENV}`)});
 const port = process.env.PORT || 8000;
 app.use(cors({
     origin: process.env.URL_CLIENT,
     credentials: true,
 }));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
