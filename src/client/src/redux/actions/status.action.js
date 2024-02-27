@@ -24,11 +24,10 @@ export const checkLogin = (isLogged) => {
         isLogged
     }
 }
-export const login = (gmail, password) => {
+export const login = (gmail) => {
     return {
         type:"LOGIN",
-        gmail: gmail,
-        password: password,
+        gmail,
     }
 }
 export const logout = () => {

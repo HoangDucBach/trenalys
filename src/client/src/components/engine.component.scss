@@ -18,10 +18,41 @@
   }
 }
 
+// USER STATUS ENGINE
+.user-status-engine {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: $spacing-normal;
+
+}
+
+.user-status-engine__container-login-and-register {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-normal;
+  width: 100%;
+
+}
+
 // INPUT ENGINE
+.input-engine {
+  width: fit-content;
+}
+
 .component.input-engine {
   padding: $padding-xsmall $padding-xsmall;
   width: 100%;
+}
+
+.input-engine > .container-input {
+  &:focus-within {
+    border: $size-border-normal solid $color-30;
+  }
 }
 
 // SIGN ENGINE
@@ -30,6 +61,8 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-normal;
+  width: fit-content;
+  height: fit-content;
 }
 
 .container-login {
@@ -125,6 +158,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  background-color: $color-01;
 }
 
 // SORT ENGINE
@@ -133,6 +167,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  background-color: $color-01;
+
+  .sort-title {
+    font-weight: 700;
+  }
 }
 
 // SURVEY ENGINE
@@ -165,11 +204,6 @@
 }
 
 .survey-engine {
-  background-color: $color-30;
-  color: $color-60;
-
-  font-size: $size-text-normal;
-  font-weight: 600;
 }
 
 .button-submit-survey {
@@ -203,26 +237,33 @@
   gap: $spacing-normal;
   padding: $padding-normal;
   border-radius: $radius-normal;
-  background-color: $color-01;
-  border: 1px solid $color-05;
+  background-color: $color-component;
   width: 300px;
   height: 350px;
+  box-shadow: 0 0 15px 0 rgba(89, 89, 89, 0.25);
 }
 
-.container-trend-id {
+.container-trend-graph {
+  background-color: $color-30;
+}
+
+.container-trend-title-and-id {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: fit-content;
-
-  background-color: rgba(171, 171, 171, 0.25);
-  padding: 10px $padding-normal;
-  border-radius: $radius-normal;
+  justify-content: space-between;
+  width: 100%;
 
   & .trend-id {
     font-size: $size-text-normal;
     font-weight: 500;
-    color: $color-05;
+    background-color: transparent;
+
+    border-radius: $radius-normal;
+    padding: $padding-xsmall;
+
+    color: $color-highlight;
+    border: 2px solid $color-highlight;
   }
 }
 
@@ -245,7 +286,7 @@
 
     & .trend-title {
       font-size: $size-text-large;
-      font-weight: 600;
+      font-weight: 1000;
       color: $color-30;
     }
 
@@ -265,6 +306,8 @@
     text-align: left;
     word-wrap: break-word;
     height: 4em;
+    font-size: $size-text-small;
+    font-weight: 300;
   }
 }
 
@@ -274,7 +317,7 @@
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  height: 100%;
+  height: fit-content;
 }
 
 .container-trend-detail-item {
@@ -287,24 +330,37 @@
 
   & .trend-detail-item__title,
   .trend-detail-item__value {
-    font-size: $size-text-normal;
+    font-size: $size-text-small;
     color: $color-05;
-  }
-}
-
-.container-trend-voted {
-  & .trend-voted {
-    font-size: $size-text-xxlarge;
-    font-weight: 600;
-    color: $color-30;
   }
 }
 
 .container-trend-tags {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   width: 100%;
+  height: 100%;
+  align-content: space-around;
+  gap: 4px;
+
+  & .trend-tag {
+    display: flex;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+
+    color: $color-60;
+    background-color: $color-30;
+    text-align: center;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
 }
 
 // TREND TAG
@@ -315,8 +371,46 @@
   background-color: $color-30;
   color: $color-60;
   border: none;
-  border-radius: $radius-small;
   padding: 5px 5px;
+}
+.trend-tag-add-engine{
+  position: relative;
+  width: 100%;
+}
+
+.component-custom.container-trend-tag {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-normal;
+  padding-top: $spacing-small;
+  padding-bottom: $spacing-small;
+
+  background-color: $color-component;
+
+  & .trend-tag-delete {
+    background-color: transparent;
+  }
+}
+
+.trend-tag {
+  font-size: $size-text-normal;
+  font-weight: 700;
+  color: $color-30;
+  max-width: 10em;
+  width: fit-content;
+}
+input#input-trend-tag-add{
+  width: fit-content;
+}
+.component-custom.container-trend-tag-add {
+  background-color: $color-01;
+  gap: $spacing-normal;
+  width: 100%;
+  padding: $padding-large $padding-normal;
+  flex-wrap: wrap;
+  justify-content: start;
 }
 
 .example-class {

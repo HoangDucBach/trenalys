@@ -10,9 +10,10 @@ router.post('/home/create-trend-form', async (req, res) => {
         trendTitle,
         trendDescription,
         trendTimeCreated,
+        trendTags
     } = req.body;
     try {
-        const status = await TrendManager.createTrend(trendTitle, trendDescription, trendTimeCreated);
+        const status = await TrendManager.createTrend(trendTitle, trendDescription, trendTimeCreated,trendTags);
         if (status) {
             res.status(200).json({success: true, message: 'Trend created successfully', data: {}});
         } else {
@@ -25,7 +26,6 @@ router.post('/home/create-trend-form', async (req, res) => {
 router.get('/home/get-trends', async (req, res) => {
     try {
         const trends = await TrendManager.getAllTrends();
-        console.log(trends);
         res.status(200).json({success: true, message: 'Trends fetched successfully', data: trends});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});

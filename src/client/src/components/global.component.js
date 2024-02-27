@@ -1,3 +1,8 @@
+import {Body, HeaderTop} from "./body.component";
+import {Outlet} from "react-router-dom";
+import {LoginEngine, RegisterEngine} from "./engine.component";
+import './global.component.scss'
+
 export function SVGLogo() {
     return(
         <div className="svg-logo">
@@ -15,4 +20,19 @@ export function NotFoundComponent() {
             <p>Page Not Found</p>
         </div>
     );
+}
+
+export function LoginComponent() {
+ return(
+     <div className='login-component'>
+         <LoginEngine/>
+     </div>
+ )
+}
+export function RegisterComponent() {
+    return(
+        <div className='login-component'>
+            <RegisterEngine/>
+        </div>
+    )
 }

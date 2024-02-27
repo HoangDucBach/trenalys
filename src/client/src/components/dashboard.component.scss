@@ -7,6 +7,32 @@
   height: 100vh;
 }
 
+.dashboard-header-left {
+  padding: $padding-large;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .container-menu {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-normal;
+    width: 100%;
+    height: fit-content;
+    padding: $padding-normal;
+    background-color: $color-component;
+    border-radius: $radius-normal;
+    box-shadow: 0 0 20px rgb(82 82 82 / 25%);;
+
+  }
+
+}
+
 .dashboard-main {
   display: flex;
   flex-direction: column;
@@ -17,7 +43,7 @@
 }
 
 .dashboard-title {
-  font-size: $size-text-xxxlarge;
+  font-size: 50px;
   font-weight: 700;
   color: $color-30;
 }
@@ -42,9 +68,59 @@
     flex: 1;
   }
 }
+
 .container-trend-card-engine {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: $spacing-normal;
+}
+
+// CREATE TREND FORM
+.dashboard-create-trend-form-main {
+  & #create-trend-form__input--description {
+    height: 10em;
+  }
+}
+
+form.container-create-trend-form {
+  display: flex;
+  justify-items: stretch;
+  flex-wrap: wrap;
+  flex-direction: row;
+  & > .custom-component {
+    flex: 1;
+  }
+}
+
+.container-create-trend-form__button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-normal;
+  width: 100%;
+
+  & #create-trend-form__button--cancel {
+    border: 1px solid $color-30;
+    color: $color-30;
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.container-create-trend-form__tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: $spacing-normal;
+}
+
+#add-tag-button {
+  border-radius: 10px;
+  border: 1px dashed #B4B4B4;
+  background-color: transparent;
+  color: $color-05;
+  box-shadow: none;
+  font-weight: normal;
 }

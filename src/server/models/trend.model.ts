@@ -13,18 +13,17 @@ const queryCreateTable = `
 
 export class TrendManager {
 
-        static async createTrend(trendTitle: string, trendDescription: string, trendTimeCreated: string): Promise<boolean> {
-            const insertQuery = 'INSERT INTO trends (name, description, timeCreated) VALUES ($1, $2, $3)';
-            const insertValues = [trendTitle, trendDescription, trendTimeCreated];
-
-            try {
-                await client.query(insertQuery, insertValues);
-            } catch (error) {
-                console.error('Error creating trend:', error);
-                throw TrendDatabaseStatus.ERROR_TREND_CREATE;
-            }
-            return true;
+    static async createTrend(trendTitle: string, trendDescription: string, trendTimeCreated: string, trendTags: string[]): Promise<boolean> {
+        const insertQuery = 'INSERT INTO trends (name, description, timeCreated,tags) VALUES ($1, $2, $3,$4)';
+        const insertValues = [trendTitle, trendDescription, trendTimeCreated, trendTags];
+        try {
+            await client.query(insertQuery, insertValues);
+        } catch (error) {
+            console.error('Error creating trend:', error);
+            throw TrendDatabaseStatus.ERROR_TREND_CREATE;
         }
+        return true;
+    }
 
     static async getAllTrends(): Promise<any[]> {
         const query = 'SELECT * FROM trends';

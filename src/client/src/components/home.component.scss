@@ -10,10 +10,11 @@
 
 .home-main {
   display: flex;
-  flex: 1;
+  flex: 1 1;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100%;
+  align-items: center;
 }
 
 .home-demo {
@@ -24,42 +25,51 @@
   align-items: center;
 }
 
-.home-demo-content {
+.home-section-open {
   display: flex;
   flex-shrink: 2;
   gap: $spacing-normal;
   flex-direction: column;
+  align-items: center;
+  padding: 70px 25%;
+  min-width: 200px;
+  & * {
+    text-align: center;
+  }
 
-  & .container-demo-extra-content {
+  & .container-tagline {
     display: flex;
     flex-direction: row;
     align-items: center;
 
     & p {
       font-size: $size-text-xxlarge;
+      font-weight: 700;
+      color: $color-highlight;
     }
   }
 
-  & .container-demo-content {
+  & .container-title {
+    & h1 {
+      font-size: 60px;
+      font-weight: 1000;
+    }
+  }
+
+  & .container-description {
     color: $color-05;
     font-size: $size-text-xxxlarge;
 
     & b {
       font-weight: 900;
       color: $color-05;
-
     }
   }
-
-  & .container-demo-content-title {
-    font-size: 60px;
-    font-weight: 700;
-    word-break: break-word;
-    width: 100%;
-
-    & span {
-      font-weight: 900;
-      color: $color-05;
+  & .button-custom{
+    & .button-custom__icon {
+      display: flex;
+      height: fit-content;
+        width: fit-content;
     }
   }
 }
@@ -83,4 +93,8 @@
   flex-direction: row;
   gap: 20px;
   width: 300px;
+}
+
+.button-custom, #button-explore {
+  color: $color-60;
 }

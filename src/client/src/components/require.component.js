@@ -1,13 +1,14 @@
-// RequireLoginComponent.js
 import React from 'react';
-import {useNavigate} from 'react-router-dom';
+import {Navigate, useNavigate} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
-const RequireLoginComponent = ({children}) => {
+const RequireAuth = ({children}) => {
     const isLogged = useSelector(state => state.status.isLogged);
     if (!isLogged) {
-        window.location.href = '/login';
-        return null;
+        // window.location.href = '/login';
+        return(
+            <Navigate to={'/login'}/>
+        ) ;
     }
 
     return <>{children}</>;
@@ -17,10 +18,12 @@ const RequireDashboardComponent = ({children}) => {
     const navigate = useNavigate();
 
     if (!isLogged) {
-        window.location.href = '/dashboard';
-        return null;
+        // window.location.href = '/dashboard';
+        return (
+            <Navigate to={'/dashboard'}/>
+        );
     }
 
     return <>{children}</>;
 };
-export default RequireLoginComponent;
+export default RequireAuth;

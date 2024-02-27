@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 @import "variables";
 
 body {
@@ -7,7 +7,7 @@ body {
 }
 
 * {
-  font-family: Roboto, sans-serif;
+  font-family: "DM Sans", serif;
   font-weight: 400;
   color: $color-30;
   box-sizing: border-box;
@@ -15,26 +15,65 @@ body {
   padding: 0;
 }
 
+.button-custom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: $spacing-normal;
+  width: fit-content;
+
+  font-weight: 700;
+  font-size: $size-text-normal;
+
+  border: 0;
+  border-radius: $radius-normal;
+  padding: $padding-small $padding-normal;
+  background-color: $color-highlight;
+
+  box-shadow: $shadow-normal;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  & a {
+    text-decoration: none;
+    color: $color-60;
+  }
+}
+
+.component-custom {
+  display: flex;
+  justify-content: space-between;
+  gap: 0;
+  border-radius: $radius-normal;
+  padding: $padding-normal;
+}
+
 .button-radius {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
-  border: none;
-  border-radius: 100px;
+  border-radius: $radius-normal;
   padding: $padding-small $padding-normal;
-  width: 50%;
+  width: fit-content;
   font-size: $size-text-normal;
-  font-weight: 500;
+  font-weight: 700;
+
   &:active {
     transform: scale(0.95);
   }
 }
 
-.title {
-  font-size: $size-text-xxxlarge;
-  font-weight: 700;
+.title-custom {
+  font-weight: 1000;
   color: $color-30;
+}
+
+.title-component-title {
+  font-size: $size-text-xxxlarge;
 }
 
 .incorrect-message {
@@ -42,10 +81,12 @@ body {
   font-weight: 500;
   color: $color-error;
 }
-.container{
+
+.container {
   display: flex;
   width: 100%;
 }
+
 .success-message {
   font-size: $size-text-normal;
   font-weight: 500;
@@ -58,13 +99,6 @@ body {
   align-items: center;
   width: fit-content;
   height: fit-content;
-}
-
-.component {
-  border: 1px solid $color-05;
-  border-radius: $radius-normal;
-  background-color: $color-01;
-  padding: $padding-normal;
 }
 
 img {
@@ -82,5 +116,15 @@ input {
   color: $color-05;
   font-size: $size-text-normal;
   font-weight: 500;
+  width: 100%;
+}
+
+textarea {
+  all: unset;
+  color: $color-05;
+  font-size: $size-text-normal;
+  font-weight: 500;
+  height: 5em;
+  word-break: break-word;
   width: 100%;
 }

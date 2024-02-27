@@ -8,12 +8,17 @@ import {
     Route,
     Outlet,
 } from "react-router-dom";
-import {DashboardComponent, DashboardHomeComponent} from "./components/dashboard.component";
-import RequireLoginComponent from "./components/require.component";
-import {NotFoundComponent} from "./components/global.component";
+import RequireAuth from "./components/require.component";
+import {LoginComponent, NotFoundComponent, RegisterComponent} from "./components/global.component";
 import axios from "axios";
 import {connect, disconnect} from "./redux/actions/status.action";
 import {useEffect} from "react";
+import {Body, HeaderTop} from "./components/body.component";
+import {
+    DashboardComponent,
+    DashboardCreateTrendFormComponent, DashboardCreateTrendFormMain,
+    DashboardHomeComponent, DashboardHomeMain
+} from "./components/dashboard.component";
 
 function App() {
     const dispatch = useDispatch();
@@ -41,22 +46,34 @@ function App() {
             <Routes>
                 <Route
                     path="/"
-                    element={<Outlet/>}
-                >
-                    <Route path="/" element={<HomeComponent signType="login"/>}/>
-                    <Route path="login" element={<HomeComponent signType="login"/>}/>
-                    <Route path="register" element={<HomeComponent signType="register"/>}/>
+                    element={
+                        <Body>
+                            <Outlet/>
+                        </Body>
+                    }>
+                    <Route path="/" element={<HomeComponent/>}/>
+                    <Route path="login" element={<LoginComponent/>}/>
+                    <Route path="register" element={<RegisterComponent/>}/>
 
-                    <Route path="dashboard/*" element={<RequireLoginComponent>
-                        <Outlet/>
-                    </RequireLoginComponent>}>
-                        <Route path="home" element={<DashboardHomeComponent/>}/>
+                    <Route
+                        path="dashboard"
+                        element={
+                            <RequireAuth>
+                                <Outlet/>
+                            </RequireAuth>}>
+                        <Route
+                            path="home"
+                            element={<DashboardHomeComponent/>
+                            }>
+                        </Route>
+                        <Route path="create-trend-form" element={<DashboardCreateTrendFormComponent/>}/>
                     </Route>
                     <Route path="*" element={<NotFoundComponent/>}/>
                 </Route>
             </Routes>
         </BrowserRouter>
-    );
+    )
+        ;
 }
 
 export default App;
