@@ -1,0 +1,12 @@
+@import "../scss/_variables.scss";
+
+.login-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+  height: 100%;
+  padding: 10% 25%;
+}

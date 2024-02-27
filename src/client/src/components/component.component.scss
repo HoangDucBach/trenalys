@@ -1,0 +1,29 @@
+@import "../scss/_variables.scss";
+// CUSTOM COMPONENT
+.custom-component {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-normal;
+}
+
+.container-custom-component__title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-normal;
+  width: fit-content;
+}
+.component-title {
+  font-size: $size-text-xxlarge;
+  font-weight: 700;
+  color: $color-30;
+}
+.container-custom-component__description {
+  color: $color-05;
+}
+.container-custom-component__main {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-normal;
+}
