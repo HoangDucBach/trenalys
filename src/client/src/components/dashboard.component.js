@@ -120,7 +120,7 @@ export function DashboardCreateTrendFormMain() {
     const handleAddTag = (e) => {
         e.preventDefault();
         if (trendTags.length >= 4) return;
-        setTrendTags([...trendTags, [<TrendTag tag={'Edit new tag'} isDemo={true}/>]]);
+        setTrendTags([...trendTags, <TrendTag tag={'Edit new tag'}/>]);
     };
     const handleShortDescriptionChange = (e) => {
         const inputValue = e.target.value;
@@ -134,11 +134,11 @@ export function DashboardCreateTrendFormMain() {
             trendTitle: title,
             trendDescription: description,
             trendTimeCreated: new Date().toISOString(),
-            trendTags: trendTags.map(tag => tag[0].props.tag),
+            trendTags: trendTags.map(tag => tag.props.tag),
         };
 
         try {
-            const postUrl = `${process.env.REACT_APP_SERVER_URL}/dashboard/home/create-trend-form`;
+            const postUrl = `${process.env.REACT_APP_SERVER_URL}/dashboard/create-trend-form`;
             const response = await axios.post(postUrl, formData);
             console.log('Form submitted successfully:', response.data);
             await window.location.reload();

@@ -107,6 +107,7 @@ export function LoginEngine() {
                 dispatch(checkLogin(true));
                 dispatch({type: 'CHECK_LOGIN', payload: true});
                 dispatch({type: 'LOGIN', payload: loginData.gmail});
+                window.location.href = '/dashboard/home';
             })
             .catch(err => {
                 console.log('Login failed:', err);

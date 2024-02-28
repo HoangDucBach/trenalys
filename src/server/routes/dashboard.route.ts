@@ -5,7 +5,7 @@ const router = express.Router();
 router.post('/', (req, res) => {
 
 });
-router.post('/home/create-trend-form', async (req, res) => {
+router.post('/create-trend-form', async (req, res) => {
     const {
         trendTitle,
         trendDescription,
