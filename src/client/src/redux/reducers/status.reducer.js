@@ -1,7 +1,13 @@
 const initialState = {
     isLogged: false,
     gmail: null,
-    isConnected: false
+    isConnected: false,
+    notification: {
+        isAvailable: false,
+        status: '',
+        title: '',
+        message: ''
+    }
 }
 
 export function statusReducer(state = initialState, action) {
@@ -32,6 +38,26 @@ export function statusReducer(state = initialState, action) {
                 ...state,
                 isConnected: false
             };
+        case 'RECEIVE_NOTIFICATION':
+            return {
+                ...state,
+                notification: {
+                    isAvailable: true,
+                    status: action.payload.status,
+                    title: action.payload.title,
+                    message: action.payload.message
+                }
+            }
+        case 'CLEAR_NOTIFICATION':
+            return {
+                ...state,
+                notification: {
+                    isAvailable: false,
+                    status: '',
+                    title: '',
+                    message: ''
+                }
+            }
         default:
             return state;
     }

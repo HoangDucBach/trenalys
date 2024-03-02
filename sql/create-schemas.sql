@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
+    gmail VARCHAR(255) NOT NULL,
     name VARCHAR(255),
     password VARCHAR(255)
 );
@@ -9,17 +9,25 @@ CREATE TABLE IF NOT EXISTS trends (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    numberOfVotes INTEGER,
+    numberOfVotes INTEGER DEFAULT 0,
     description TEXT
 );
 
-CREATE TABLE IF NOT EXISTS trend_tag(
-	id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+CREATE TABLE IF NOT EXISTS election_ballots (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    trendId INTEGER REFERENCES trends(id),
+    numberOfVotes INTEGER DEFAULT 0,
+    timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS trend_has_tag (
-    trend_id INTEGER REFERENCES trends(id),
-    trend_tag_id INTEGER REFERENCES trend_tag(id),
-    PRIMARY KEY (trend_id, trend_tag_id)
+CREATE TABLE IF NOT EXISTS trend_has_election_ballots (
+    trendId INTEGER REFERENCES trends(id),
+    electionBallotId INTEGER REFERENCES election_ballots(id),
+    PRIMARY KEY (trendId, electionBallotId)
+);
+CREATE TABLE IF NOT EXISTS USER_VOTE_ELECTION_BALLOTS (
+    userId INTEGER REFERENCES users(id),
+    electionBallotId INTEGER REFERENCES election_ballots(id),
+    PRIMARY KEY (userId, electionBallotId)
 );

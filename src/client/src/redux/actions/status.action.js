@@ -26,22 +26,32 @@ export const checkLogin = (isLogged) => {
 }
 export const login = (gmail) => {
     return {
-        type:"LOGIN",
+        type: "LOGIN",
         gmail,
     }
 }
 export const logout = () => {
     return {
-        type:"LOGOUT",
+        type: "LOGOUT",
     }
 }
 export const connect = () => {
     return {
-        type:"CONNECT"
+        type: "CONNECT"
     }
 }
 export const disconnect = () => {
     return {
-        type:"DISCONNECT"
+        type: "DISCONNECT"
+    }
+}
+export const receiveNotification = (status, title, message) => {
+    return {
+        type: "RECEIVE_NOTIFICATION",
+        notification: {
+            status,
+            title,
+            message
+        }
     }
 }

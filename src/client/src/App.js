@@ -17,7 +17,7 @@ import {Body, HeaderTop} from "./components/body.component";
 import {
     DashboardComponent,
     DashboardCreateTrendFormComponent, DashboardCreateTrendFormMain,
-    DashboardHomeComponent, DashboardHomeMain
+    DashboardHomeComponent, DashboardHomeMain, DashboardTrendComponent
 } from "./components/dashboard.component";
 
 function App() {
@@ -68,6 +68,13 @@ function App() {
                         </Route>
                         <Route path="create-trend-form" element={<DashboardCreateTrendFormComponent/>}/>
                     </Route>
+
+                    <Route path="/trend/:id" element={
+                        <RequireAuth>
+                            <DashboardTrendComponent/>
+                        </RequireAuth>
+                    }/>
+
                     <Route path="*" element={<NotFoundComponent/>}/>
                 </Route>
             </Routes>

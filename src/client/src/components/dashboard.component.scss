@@ -7,6 +7,13 @@
   height: 100vh;
 }
 
+.dashboard-header-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 .dashboard-header-left {
   padding: $padding-large;
   display: flex;
@@ -36,16 +43,22 @@
 .dashboard-main {
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
   padding: $padding-normal;
   gap: $spacing-normal;
 }
 
+.dashboard-home-main {
+  width: 100%;
+}
+
 .dashboard-title {
   font-size: 50px;
   font-weight: 700;
   color: $color-30;
+  width: 100%;
 }
 
 .container-dashboard-engine {
@@ -77,19 +90,44 @@
 }
 
 // CREATE TREND FORM
+.dashboard-create-trend-form {
+  & .dashboard-title {
+    text-align: center;
+  }
+}
+
 .dashboard-create-trend-form-main {
   & #create-trend-form__input--description {
     height: 10em;
   }
 }
 
-form.container-create-trend-form {
-  display: flex;
-  justify-items: stretch;
-  flex-wrap: wrap;
-  flex-direction: row;
-  & > .custom-component {
-    flex: 1;
+.custom-component.container-create-trend-form {
+  width: 50vw;
+  height: fit-content;
+  background-color: $color-component;
+  box-shadow: $shadow-normal;
+}
+
+.container-create-trend-form .custom-component {
+  &:nth-child(1) {
+    grid-area: detail;
+  }
+
+  &:nth-child(2) {
+    grid-area: tags;
+  }
+
+  &:nth-child(3) {
+    grid-area: election-ballot;
+  }
+}
+
+.container-create-trend-form__warning {
+  padding: 25px 0;
+
+  & p {
+    color: $color-05;
   }
 }
 
@@ -123,4 +161,50 @@ form.container-create-trend-form {
   color: $color-05;
   box-shadow: none;
   font-weight: normal;
+}
+
+// DASHBOARD TREND
+.dashboard-trend-main {
+  width: 100%;
+
+  & .container-trend__header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    & .container-trend-title-and-id {
+      width: fit-content;
+    }
+
+    & .title-custom {
+      text-align: left;
+      font-weight: 700;
+    }
+  }
+
+  & .container-trend__main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xlarge;
+  }
+}
+.custom-component.trend-graph{
+    height: 300px;
+  .trend-graph__select {
+    width: 10rem;
+    &:focus {
+      outline: 1px solid $color-30 !important;
+    }
+  }
+}
+.custom-component.trend-election-ballots {
+  & .container-custom-component__main {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-normal;
+    width: 100%;
+    flex-wrap: wrap;
+  }
 }

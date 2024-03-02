@@ -1,7 +1,9 @@
-import {SVGLogo} from "./global.component";
+import {StatusNotificationComponent, SVGLogo} from "./global.component";
 import "./body.component.scss";
 import {Link} from "react-router-dom";
 import {UserStatusEngine} from "./engine.component";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
 
 export function HeaderTop() {
     return (
@@ -48,9 +50,29 @@ export function Main({children}) {
 }
 
 export function Body({children}) {
+    const status = useSelector(state => state.status);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (status.notification.isAvailable) {
+            const timer = setTimeout(() => {
+                dispatch({
+                    type: 'CLEAR_NOTIFICATION'
+                });
+            }, 3000);
+            return () => {
+                clearTimeout(timer);
+            };
+        }
+    }, [status.notification.isAvailable]);
     return (
         <div className="body">
             <HeaderTop/>
+            <StatusNotificationComponent
+                isAvailable={status.notification.isAvailable}
+                status={status.notification.status}
+                title={status.notification.title}
+                message={status.notification.message}
+            />
             <div className="main">
                 {children}
             </div>

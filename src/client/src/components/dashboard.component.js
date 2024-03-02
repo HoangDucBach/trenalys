@@ -5,17 +5,22 @@ import {
     SortEngine,
     SurveyEngine,
     TrendCardEngine,
-    TrendTag,
-    TrendTagAdd, TrendTagAddEngine
+    TrendTagAddEngine, ElectionBallotAddEngine, ElectionBallotEngine
 } from "./engine.component";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import RequireAuth from "./require.component";
-import {CustomComponent} from "./component.component";
-export function DashboardComponent({children}) {
+import {CustomComponent, CustomHeader} from "./component.component";
+import {Link, useLocation} from "react-router-dom";
+import {SVGIconWithBackground} from "./global.component";
+import {StatusGraphComponent, TrendGraph} from "./graph.component";
+import Select from "react-select";
+import {useSelector} from "react-redux";
+
+export function DashboardComponent({children, className}) {
     return (
         <RequireAuth>
-            <div className="dashboard">
+            <div className={`dashboard ${className}`}>
                 <DashboardHeaderLeft/>
                 <div className="dashboard-main">
                     {children}
@@ -24,6 +29,7 @@ export function DashboardComponent({children}) {
         </RequireAuth>
     );
 }
+
 export function DashboardHeaderTop({title, menuEngine = true}) {
     return (
         <div className="dashboard-header-top">
@@ -101,7 +107,6 @@ export function DashboardHomeMain() {
 }
 
 
-
 export function DashboardHomeComponent({children}) {
     return (
         <DashboardComponent>
@@ -117,17 +122,8 @@ export function DashboardCreateTrendFormMain() {
     const [shortDescription, setShortDescription] = useState('');
     const [trendTags, setTrendTags] = useState([]);
     const [newTag, setNewTag] = useState('');
-    const handleAddTag = (e) => {
-        e.preventDefault();
-        if (trendTags.length >= 4) return;
-        setTrendTags([...trendTags, <TrendTag tag={'Edit new tag'}/>]);
-    };
-    const handleShortDescriptionChange = (e) => {
-        const inputValue = e.target.value;
-        if (inputValue.length <= 150) {
-            setShortDescription(inputValue);
-        }
-    };
+    const [electionBallots, setElectionBallots] = useState([]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = {
@@ -135,6 +131,7 @@ export function DashboardCreateTrendFormMain() {
             trendDescription: description,
             trendTimeCreated: new Date().toISOString(),
             trendTags: trendTags.map(tag => tag.props.tag),
+            trendElectionBallots: electionBallots.map(ballot => ballot.props.tag),
         };
 
         try {
@@ -152,7 +149,7 @@ export function DashboardCreateTrendFormMain() {
     return (
         <div className="dashboard-create-trend-form-main">
             <form
-                className="container-create-trend-form"
+                className="custom-component container-create-trend-form"
                 onSubmit={handleSubmit}
             >
                 <CustomComponent
@@ -208,8 +205,28 @@ export function DashboardCreateTrendFormMain() {
                 >
                     <TrendTagAddEngine trendTags={trendTags} setTrendTags={setTrendTags}/>
                 </CustomComponent>
+                <CustomComponent
+                    title='Election Ballot'
+                    description='Add election ballot for survey'
+                    svg={
+                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="25" height="25" rx="5" fill="#222222"/>
+                            <path
+                                d="M11.8322 3.75004C11.6363 3.75054 11.4461 3.81133 11.2844 3.92315C11.1228 4.03489 10.9971 4.19236 10.9202 4.37494L10.9198 4.37584L8.84621 9.35002H7.2502C6.58171 9.35002 5.94414 9.6334 5.47669 10.132C5.00975 10.63 4.75 11.3022 4.75 12V17.6C4.75 18.2978 5.00975 18.97 5.47669 19.4681C5.94414 19.9666 6.58171 20.25 7.2502 20.25H16.7985H16.7986C17.3881 20.2498 17.9564 20.029 18.405 19.63C18.8533 19.2313 19.1536 18.6803 19.2576 18.0743L19.2577 18.0739L20.2103 12.474C20.2103 12.474 20.2103 12.474 20.2103 12.4739C20.2749 12.094 20.2605 11.7036 20.168 11.33C20.0755 10.9566 19.9069 10.6083 19.6732 10.31C19.4403 10.0118 19.1478 9.77041 18.8156 9.60407C18.4834 9.43766 18.1201 9.3507 17.7516 9.35002H17.7511H14.6889L14.9855 8.54219L14.9856 8.5422L14.9869 8.53836C15.1742 8.00131 15.2365 7.42437 15.1686 6.85671C15.1008 6.28903 14.9048 5.74634 14.5964 5.27526C14.2879 4.80413 13.8757 4.41819 13.3941 4.15192C12.9126 3.88565 12.3765 3.7474 11.8322 3.75004ZM11.8322 3.75004C11.8323 3.75004 11.8324 3.75004 11.8325 3.75004L11.8331 4.00004L11.8319 3.75004C11.832 3.75004 11.8321 3.75004 11.8322 3.75004ZM16.8029 18.15L16.8029 18.15H16.7985H10.5005V10.618L12.426 5.99714C12.5225 6.04733 12.6135 6.11015 12.6969 6.1846C12.8387 6.31113 12.9553 6.46856 13.0386 6.64751C13.1219 6.8265 13.1698 7.02262 13.1788 7.22342C13.1877 7.42422 13.1575 7.62455 13.0904 7.81157L13.0896 7.81397L12.6922 8.95737C12.6922 8.95749 12.6922 8.95761 12.6921 8.95774C12.5949 9.23549 12.5622 9.53364 12.5965 9.82708C12.6309 10.1207 12.7314 10.4021 12.8905 10.6472C13.0497 10.8923 13.2633 11.0944 13.514 11.2348C13.7649 11.3753 14.0451 11.4495 14.3303 11.45H14.3308L17.7511 11.45L17.7515 11.45C17.8224 11.4499 17.893 11.4664 17.9584 11.499C18.024 11.5317 18.0834 11.5801 18.1316 11.6419L18.1316 11.6419L18.1345 11.6455C18.1839 11.7064 18.2209 11.7792 18.2419 11.859C18.2628 11.9385 18.2671 12.0221 18.2544 12.1038L17.3022 17.7018C17.2796 17.8337 17.2142 17.9497 17.1218 18.0305C17.0297 18.1111 16.9166 18.152 16.8029 18.15ZM8.50033 18.15H7.2502C7.12296 18.15 6.9974 18.0962 6.9022 17.9947C6.80648 17.8926 6.75013 17.7509 6.75013 17.6V12C6.75013 11.8491 6.80648 11.7074 6.9022 11.6053C6.9974 11.5038 7.12296 11.45 7.2502 11.45H8.50033V18.15Z"
+                                fill="#FFFBF3" stroke="#FFFBF3" strokeWidth="0.5"/>
+                        </svg>
+
+                    }
+                >
+                    <ElectionBallotAddEngine votes={electionBallots} setVotes={setElectionBallots}/>
+                    <div className="container-create-trend-form__warning">
+                        <p>Please ensure that this survey is for reference only, the analysis provided is based on user
+                            participation and is objective.</p>
+                    </div>
+                </CustomComponent>
                 <div className="container-create-trend-form__button">
-                    <button className="button-custom" id='create-trend-form__button--cancel'>Cancel</button>
+                    <Link to={'/dashboard/home'} className="button-custom"
+                          id='create-trend-form__button--cancel'>Cancel</Link>
                     <button type='submit' className="button-custom" id='create-trend-form__button--create'>Create
                     </button>
                 </div>
@@ -220,9 +237,143 @@ export function DashboardCreateTrendFormMain() {
 
 export function DashboardCreateTrendFormComponent() {
     return (
-        <DashboardComponent>
+        <DashboardComponent className={'dashboard-create-trend-form'}>
             <DashboardHeaderTop title={"Create Trend Form"} menuEngine={false}/>
             <DashboardCreateTrendFormMain/>
+        </DashboardComponent>
+    );
+}
+
+function DashboardTrendMain() {
+    const [trend, setTrend] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+    const {id} = useLocation().state;
+
+    const status = useSelector(state => state.status);
+
+    // GRAPH
+    const [selectedGraph, setSelectedGraph] = useState('bar');
+    const graphOptions = [
+        {value: 'bar', label: 'Bar'},
+        {value: 'pie', label: 'Pie'}
+    ]
+    const graphOptionSelectStyle = {
+        control: (provided, state) => ({
+            ...provided,
+            borderRadius: '10px',
+            backgroundColor: '#E9E9E9',
+            fontFamily: 'DM Sans',
+
+            padding: '5px',
+            border: state.isFocused ? '3px solid #6946CB' : '3px solid #E9E9E9',
+            boxShadow: 'none',
+            '&:hover': {},
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            fontFamily: 'DM Sans',
+            backgroundColor: state.isFocused ? '#6946CB' : '#E9E9E9',
+            color: state.isFocused ? '#ffffff' : '#222222',
+        }),
+        menu: (provided, state) => ({
+            ...provided,
+            borderRadius: '10px',
+            backgroundColor: '#E9E9E9',
+            fontFamily: 'DM Sans',
+        }),
+        menuList: (provided, state) => ({
+            ...provided,
+            backgroundColor: '#ffffff',
+        }),
+
+    };
+    const handleChangeSelectedGraph = (e) => {
+        setSelectedGraph(e.value);
+
+    }
+    useEffect(() => {
+    }, [selectedGraph]);
+    useEffect(() => {
+        async function getTrend() {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/trend/${id}`,
+                    {
+                        params: {
+                            gmail: status.gmail,
+                        }
+                    });
+                setTrend(response.data.trend);
+                console.log('trend:', response.data.trend);
+            } catch (error) {
+                console.error('Error fetching trend:', error);
+            }
+        }
+
+        getTrend().then(() => setIsLoading(false));
+    }, []);
+    if (isLoading) return (
+        <div className="dashboard-trend-main">
+            <div className="container-trend__header">
+                <div className="container-trend-title-and-id">
+                    <h1 className="title-custom">Loading...</h1>
+                </div>
+            </div>
+        </div>);
+    return (
+        <div className="dashboard-trend-main">
+            <div className="container-trend__header">
+                <div className="container-trend-title-and-id">
+                    <h1 className="title-custom">{trend.name}</h1>
+                    <div className="trend-id">
+                        #{trend.id}
+                    </div>
+                </div>
+                <button className="button-custom">Follow</button>
+            </div>
+            <div className="container-trend__main">
+                <CustomComponent
+                    title='Detail'
+                    svg={<SVGIconWithBackground icon={'detail'}/>}
+                >
+                    <div className="trend-description">
+                        {trend.description}
+                    </div>
+                </CustomComponent>
+                <CustomComponent
+                    title='Graph'
+                    svg={<SVGIconWithBackground icon={'graph'}/>}
+                    className={'trend-graph'}
+                >
+                    <CustomHeader>
+                        <StatusGraphComponent trend={trend} typeGraph={selectedGraph}/>
+                        <Select
+                            defaultValue={graphOptions[0]}
+                            options={graphOptions}
+                            onChange={handleChangeSelectedGraph}
+                            className='trend-graph__select'
+                            styles={graphOptionSelectStyle}
+                        />
+                    </CustomHeader>
+                    <TrendGraph trend={trend} type={selectedGraph}/>
+                </CustomComponent>
+                <CustomComponent
+                    title='Election Ballots'
+                    svg={<SVGIconWithBackground icon={'election_ballot'}/>}
+                    className={'trend-election-ballots'}
+                >
+                    {
+                        trend.electionBallots.map(ballot => (<ElectionBallotEngine ballot={ballot} isVoted={ballot.isVoted}/>))
+                    }
+                </CustomComponent>
+            </div>
+        </div>
+    );
+}
+
+export function DashboardTrendComponent({className}) {
+    return (
+        <DashboardComponent className={`dashboard-trend ${className}`}>
+            <DashboardTrendMain/>
         </DashboardComponent>
     );
 }

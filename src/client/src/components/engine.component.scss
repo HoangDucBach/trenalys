@@ -1,20 +1,44 @@
 @import "../scss/_variables.scss";
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 // LOADING ENGINE
+$spinner-width: 10px;
+$spinner-color: $color-60;
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .loading-engine {
-  width: 30px;
-  height: 30px;
-  border: 5px solid #D9D9D9;
-  border-top: 5px solid #878585;
+  width: 20px;
+  height: 20px;
+  border-style: solid;
+  border-color: $spinner-color $spinner-color $spinner-color transparent;
   border-radius: 50%;
+  position: relative;
   animation: spin 1s linear infinite;
 
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+  &:before, &:after {
+    content: '';
+    width: $spinner-width;
+    height: $spinner-width;
+    border-radius: 50%;
+    position: absolute;
+    left: $spinner-width;
+  }
+
+  &:before {
+    top: $spinner-width;
+  }
+
+  &:after {
+    bottom: $spinner-width;
   }
 }
 
@@ -36,12 +60,11 @@
   align-items: center;
   gap: $spacing-normal;
   width: 100%;
-
 }
 
 // INPUT ENGINE
 .input-engine {
-  width: fit-content;
+  width: 100%;
 }
 
 .component.input-engine {
@@ -79,7 +102,8 @@
   background-color: $color-01;
   padding: $padding-normal;
   border-radius: $radius-normal;
-  width: 400px;
+  width: 100%;
+  min-width: 400px;
 
   & .input-title {
     font-weight: 600;
@@ -241,17 +265,26 @@
   width: 300px;
   height: 350px;
   box-shadow: 0 0 15px 0 rgba(89, 89, 89, 0.25);
+
+  transition: box-shadow 0.5s cubic-bezier(0.77, 0, 0.3, 1.5), transform 0.5s cubic-bezier(0.77, 0, 0.3, 1.5);
+
+  &:hover {
+    box-shadow: 0 0 15px 0 rgba(89, 89, 89, 0.5);
+    transform: scale(1.05);
+  }
 }
 
 .container-trend-graph {
   background-color: $color-30;
+  width: 100%;
+  height: 45%;
 }
 
 .container-trend-title-and-id {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  gap: $spacing-normal;
   width: 100%;
 
   & .trend-id {
@@ -268,44 +301,11 @@
 }
 
 .container-trend-description {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: $spacing-normal;
-  width: 100%;
-  height: 100%;
-
-  .container-trend-title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: $spacing-normal;
-    width: 100%;
-
-    & .trend-title {
-      font-size: $size-text-large;
-      font-weight: 1000;
-      color: $color-30;
-    }
-
-
-    & .trend-follow-button {
-      border: none;
-      padding: 10px 15px;
-      width: fit-content;
-      background-color: $color-30;
-      color: $color-60;
-      font-weight: 600;
-    }
-  }
-
   & .trend-description {
     width: 100%;
     text-align: left;
     word-wrap: break-word;
-    height: 4em;
+    height: 2em;
     font-size: $size-text-small;
     font-weight: 300;
   }
@@ -363,6 +363,32 @@
   }
 }
 
+//TAG
+.component-custom.container-tag-engine {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-normal;
+  padding-top: $spacing-small;
+  padding-bottom: $spacing-small;
+
+  background-color: $color-component;
+
+  & .tag-delete {
+    background-color: transparent;
+  }
+
+  & .tag {
+    font-size: $size-text-normal;
+    font-weight: 700;
+    color: $color-30;
+    max-width: 10em;
+    width: fit-content;
+  }
+
+}
+
 // TREND TAG
 .component.trend-tag {
   display: flex;
@@ -373,7 +399,8 @@
   border: none;
   padding: 5px 5px;
 }
-.trend-tag-add-engine{
+
+.tag-add-engine {
   position: relative;
   width: 100%;
 }
@@ -401,16 +428,65 @@
   max-width: 10em;
   width: fit-content;
 }
-input#input-trend-tag-add{
+
+input#input-trend-tag-add {
   width: fit-content;
 }
-.component-custom.container-trend-tag-add {
+
+.component-custom.container-tag-add {
   background-color: $color-01;
   gap: $spacing-normal;
   width: 100%;
-  padding: $padding-large $padding-normal;
   flex-wrap: wrap;
   justify-content: start;
+}
+
+// ELECTION BALLOT ENGINE
+.election-ballot-engine.custom-component {
+  background-color: $color-component;
+  box-shadow: $shadow-normal;
+  width: fit-content;
+  padding: $padding-normal;
+
+  & .container-election-ballot__header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $spacing-normal;
+    width: 100%;
+
+    input[type="checkbox"] {
+      all: unset;
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      min-height: 20px;
+      border-radius: $radius-small;
+      border: 2px solid $color-highlight;
+
+      &:checked {
+        background-color: $color-highlight;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  & .container-election-ballot__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $spacing-normal;
+    width: 100%;
+
+    & .election-ballot__footer-item {
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-normal;
+    }
+  }
 }
 
 .example-class {

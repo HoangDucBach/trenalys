@@ -4,6 +4,8 @@ import './engine.component.scss';
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {checkLogin} from "../redux/actions/status.action";
+import {Bar} from "react-chartjs-2";
+import {TrendBarGraphDemo} from "./graph.component";
 
 export function InputEngine({type, title, placeholder, value, setValue, typeInput, id}) {
     return (
@@ -97,12 +99,11 @@ export function LoginEngine() {
         setIsLogging(true);
         const loginData = {
             gmail: gmail,
-            password: password
+            password: password,
         }
         axios
             .post(`${process.env.REACT_APP_SERVER_URL}/login`, loginData)
             .then(res => {
-                console.log('Login success:', res.data);
                 setLoginStatus(true);
                 dispatch(checkLogin(true));
                 dispatch({type: 'CHECK_LOGIN', payload: true});
@@ -112,6 +113,17 @@ export function LoginEngine() {
             .catch(err => {
                 console.log('Login failed:', err);
                 setLoginStatus(false);
+                if (err.response) {
+
+                }
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION',
+                    payload: {
+                        status: 'error',
+                        title: err.response.data.title,
+                        message: err.response.data.message
+                    }
+                })
             })
             .finally(() => setIsLogging(false));
 
@@ -123,7 +135,6 @@ export function LoginEngine() {
                 <div className="title-custom title-component-title">
                     Login
                 </div>
-                {loginStatus === false && <p className="incorrect-message">Incorrect Gmail or password.</p>}
                 <InputEngine
                     typeInput='input'
                     title='Gmail'
@@ -339,26 +350,44 @@ export function SurveyEngine() {
     )
 }
 
-export function TrendTag({ tag, deleteTag }) {
-    const [value, setValue] = useState(tag || 'Edit this tag');
-
+export function TagEngine({tag, deleteFunction, className}) {
     return (
-        <div className="container-trend-tag component-custom">
-            <div className="trend-tag">
-                {value}
+        <div className={`container-tag-engine component-custom ${className}`}>
+            <div className="tag">
+                {tag}
             </div>
-            <button className="trend-tag-delete button-custom" onClick={() => deleteTag(value)}>
+            <button className="tag-delete button-custom" onClick={deleteFunction}>
                 <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" clipRule="evenodd" d="M13 1.5L1 13.5ZM1 1.5L13 13.5Z" fill="#D8A353"/>
-                    <path d="M13 1.5L1 13.5M1 1.5L13 13.5" stroke="#6E6E6E" strokeWidth="2" stroke-linecap="round"
+                    <path d="M13 1.5L1 13.5M1 1.5L13 13.5" stroke="#6E6E6E" strokeWidth="2" strokeLinecap="round"
                           strokeLinejoin="round"/>
                 </svg>
             </button>
         </div>
-    );
+
+    )
 }
 
-export function TrendTagAddEngine({ trendTags, setTrendTags }) {
+// export function TrendTag({tag, deleteTag}) {
+//     const [value, setValue] = useState(tag || 'Edit this tag');
+//
+//     return (
+//         <div className="container-trend-tag component-custom">
+//             <div className="trend-tag">
+//                 {value}
+//             </div>
+//             <button className="trend-tag-delete button-custom" onClick={() => deleteTag(value)}>
+//                 <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+//                     <path fillRule="evenodd" clipRule="evenodd" d="M13 1.5L1 13.5ZM1 1.5L13 13.5Z" fill="#D8A353"/>
+//                     <path d="M13 1.5L1 13.5M1 1.5L13 13.5" stroke="#6E6E6E" strokeWidth="2" stroke-linecap="round"
+//                           strokeLinejoin="round"/>
+//                 </svg>
+//             </button>
+//         </div>
+//     );
+// }
+
+export function TrendTagAddEngine({trendTags, setTrendTags}) {
     const [inputValue, setInputValue] = useState('');
     const deleteTag = (tagToDelete) => {
         setTrendTags(prevTags => prevTags.filter(tag => tag.key !== tagToDelete));
@@ -374,7 +403,10 @@ export function TrendTagAddEngine({ trendTags, setTrendTags }) {
                 throw new Error('Tag already exists');
             }
             if (newTag) {
-                setTrendTags([...trendTags, <TrendTag key={newTag} tag={newTag} deleteTag={() => deleteTag(newTag)} />]);
+                setTrendTags([...trendTags, <TagEngine
+                    key={newTag}
+                    tag={newTag}
+                    deleteFunction={() => deleteTag(newTag)}/>]);
                 setInputValue('');
             }
             e.preventDefault();
@@ -382,8 +414,8 @@ export function TrendTagAddEngine({ trendTags, setTrendTags }) {
     };
 
     return (
-        <div className='trend-tag-add-engine component-custom'>
-            <div className='container-trend-tag-add component-custom'>
+        <div className='tag-add-engine'>
+            <div className='container-tag-add component-custom'>
                 {trendTags.map(tag => tag)}
                 <input
                     type="text"
@@ -397,6 +429,103 @@ export function TrendTagAddEngine({ trendTags, setTrendTags }) {
         </div>
     );
 }
+
+// VOTE ENGINE
+export function ElectionBallotEngine({ballot, isVoted = false}) {
+    const [isChecked, setIsChecked] = useState(isVoted);
+    const handleCheck = () => {
+        setIsChecked(!isChecked);
+    }
+    return (
+        <div className="election-ballot-engine custom-component">
+            <div className="container-election-ballot__header">
+                <input type="checkbox"
+                       className="election-ballot"
+                       onChange={handleCheck}
+                       checked={isChecked}
+                />
+                <div className="title-custom">{ballot.title}</div>
+            </div>
+            <div className="container-election-ballot__footer">
+                <div className="election-ballot__footer-item">
+                    <div className="election-ballot__footer-item__icon">
+                        <svg width="15" height="17" viewBox="0 0 15 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M14.4763 6.96402C14.2655 6.69414 14.0018 6.47689 13.7037 6.3276C13.4056 6.17831 13.0804 6.10062 12.7511 6.10002H9.33081L9.75085 4.95603C9.92556 4.45513 9.98375 3.91651 9.92041 3.38637C9.85707 2.85622 9.67411 2.35037 9.38721 1.91222C9.1003 1.47406 8.71803 1.11667 8.27317 0.870709C7.82832 0.624747 7.33416 0.497552 6.83309 0.500036C6.68881 0.500357 6.54768 0.545056 6.42661 0.628774C6.30555 0.712491 6.20969 0.831675 6.15053 0.972035L4.01285 6.10002H2.2502C1.65341 6.10002 1.08106 6.35288 0.659067 6.80297C0.237074 7.25305 0 7.8635 0 8.50002V14.1C0 14.7365 0.237074 15.347 0.659067 15.7971C1.08106 16.2471 1.65341 16.5 2.2502 16.5H11.7985C12.3249 16.4998 12.8346 16.3028 13.2389 15.9432C13.6432 15.5836 13.9165 15.0843 14.0112 14.532L14.9638 8.93202C15.0227 8.58592 15.0096 8.23024 14.9253 7.89016C14.8411 7.55008 14.6878 7.2339 14.4763 6.96402ZM3.75033 14.9H2.2502C2.05127 14.9 1.86048 14.8157 1.71982 14.6657C1.57916 14.5157 1.50013 14.3122 1.50013 14.1V8.50002C1.50013 8.28785 1.57916 8.08436 1.71982 7.93433C1.86048 7.78431 2.05127 7.70002 2.2502 7.70002H3.75033V14.9ZM13.5012 8.64402L12.5486 14.244C12.5166 14.4304 12.4237 14.5986 12.2864 14.7187C12.149 14.8389 11.9761 14.9031 11.7985 14.9H5.25046V7.06802L7.29063 2.17203C7.50064 2.23733 7.69567 2.34836 7.86343 2.4981C8.03118 2.64784 8.168 2.83304 8.26527 3.04202C8.36253 3.251 8.41812 3.47922 8.42852 3.71227C8.43893 3.94532 8.40393 4.17813 8.32572 4.39603L7.92819 5.54002C7.84348 5.78183 7.81488 6.0419 7.84484 6.29805C7.87479 6.55419 7.96241 6.79881 8.1002 7.01101C8.238 7.22322 8.42189 7.39671 8.63618 7.51669C8.85047 7.63667 9.08879 7.69957 9.33081 7.70002H12.7511C12.8613 7.69983 12.9702 7.72554 13.07 7.77531C13.1698 7.82509 13.2581 7.89771 13.3287 7.98802C13.4009 8.07708 13.4538 8.18205 13.4837 8.29545C13.5135 8.40885 13.5195 8.52787 13.5012 8.64402Z"
+                                fill="#222222"/>
+                        </svg>
+                    </div>
+                    <div className="election-ballot__footer-item__value">{ballot.numberofvotes} votes</div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export function VoteSettingEngine({vote, deleteVote}) {
+    const [value, setValue] = useState(vote || 'Edit this tag');
+
+    return (
+        <div className="container-trend-tag component-custom">
+            <div className="trend-tag">
+                {value}
+            </div>
+            <button className="trend-tag-delete button-custom" onClick={() => deleteVote(value)}>
+                <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M13 1.5L1 13.5ZM1 1.5L13 13.5Z" fill="#D8A353"/>
+                    <path d="M13 1.5L1 13.5M1 1.5L13 13.5" stroke="#6E6E6E" strokeWidth="2" strokeLinecap="round"
+                          strokeLinejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    );
+}
+
+export function ElectionBallotAddEngine({votes, setVotes}) {
+    const [inputValue, setInputValue] = useState('');
+    const deleteElectionBallot = (voteToDelete) => {
+        setVotes(prevVote => prevVote.filter(vote => vote.key !== voteToDelete));
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            const newVote = inputValue.trim();
+            if (newVote.length >= 30) {
+                throw new Error('Vote is too long');
+            }
+            if (votes.some(tag => tag.key === newVote)) {
+                throw new Error('Vote already exists');
+            }
+            if (newVote) {
+                setVotes([...votes,
+                    <TagEngine
+                        key={newVote}
+                        tag={newVote}
+                        deleteFunction={() => deleteElectionBallot(newVote)}
+                    />]);
+                setInputValue('');
+            }
+            e.preventDefault();
+        }
+    };
+
+    return (
+        <div className='tag-add-engine election-ballot-add-engine'>
+            <div className='container-tag-add component-custom'>
+                {votes.map(vote => vote)}
+                <input
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    id={'input-vote-tag-add'}
+                    placeholder="Add your election ballot"
+                />
+            </div>
+        </div>
+    );
+}
+
 export function TrendCardEngine({trend}) {
     const id = trend.id;
     const title = trend.name;
@@ -405,9 +534,14 @@ export function TrendCardEngine({trend}) {
     const numberOfVotes = trend.numberofvotes;
     const timeCreated = new Date(trend.timecreated);
 
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate('/trend/' + id, {state: {id}});
+    }
     return (
-        <div className="trend-card-engine component-custom">
+        <div className="trend-card-engine component-custom" onClick={handleClick}>
             <div className="container-trend-graph component-custom">
+                <TrendBarGraphDemo trend={trend}/>
             </div>
             <div className="container-trend-title-and-id">
                 <div className="trend-title title-custom">{title}</div>
@@ -440,7 +574,7 @@ export function TrendCardEngine({trend}) {
                 gap: '15px',
             }}>
                 <div className="container-trend-tags">
-                    {tags && tags.slice(0, 4).map(tag => <TrendTag tag={tag}/>)}
+                    {tags && tags.slice(0, 4).map(tag => <TagEngine tag={tag}/>)}
                 </div>
                 <div className="button-follow button-custom">
                     Follow
@@ -451,6 +585,7 @@ export function TrendCardEngine({trend}) {
     );
 
 }
+
 
 export function LoadingEngine({loading}) {
     if (!loading) {
