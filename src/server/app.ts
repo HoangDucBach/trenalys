@@ -14,7 +14,13 @@ require('dotenv-flow').config({
 });
 
 app.use(cors({
-    origin: process.env.URL_CLIENT,
+    origin: function (origin, callback) {
+        if (['https://trenalys.vercel.app', 'https://trenalys.io.vn'].indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    },
     credentials: true,
 }));
 console.log(process.env.URL_CLIENT);
