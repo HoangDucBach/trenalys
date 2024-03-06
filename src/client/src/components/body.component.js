@@ -125,7 +125,7 @@ export function Body({
                 clearTimeout(timer);
             };
         }
-    }, []);
+    }, [status.notification.isAvailable]);
     return (
         <div className="body">
             <HeaderTop/>
