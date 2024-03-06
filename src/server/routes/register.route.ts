@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
                 res.status(200).json({
                     success: true,
                     title: 'Register successful !',
-                    message: 'Login to experience now !',
+                    message: 'User created successfully',
                     data: {}
                 });
             } catch (error) {
@@ -73,20 +73,5 @@ router.post('/', async (req, res) => {
             break;
     }
 });
-router.post('/register', async (req, res) => {
-    const {gmail, password, confirmPassword} = req.body;
-    try {
-        await UserManager.createUser(gmail, password, confirmPassword);
-        res.status(200).json({success: true, message: 'Register successful', data: {}});
-    } catch (error) {
-        if (error === UserDatabaseStatus.ERROR_EMAIL_EXISTS) {
-            res.status(401).json({success: false, message: 'Email already exists', data: {}});
-        }
-        if (error === UserDatabaseStatus.ERROR_PASSWORD_MISMATCH) {
-            res.status(401).json({success: false, message: 'Password does not match', data: {}});
-        } else {
-            res.status(500).json({success: false, message: 'Internal server error', data: {}});
-        }
-    }
-});
+
 export default router;

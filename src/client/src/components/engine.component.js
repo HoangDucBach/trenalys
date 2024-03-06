@@ -173,6 +173,8 @@ export function LoginEngine() {
 }
 
 export function RegisterEngine() {
+    const dispatch = useDispatch();
+
     const [gmail, setGmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -184,7 +186,6 @@ export function RegisterEngine() {
 
     const registerUser = async () => {
         setIsRegistering(true);
-        console.log('Code:', code, 'Verify:', inputCode);
         if (password !== confirmPassword) {
             setRegisterError('Password and confirm password are not the same.');
             setRegisterStatus(false);
@@ -198,7 +199,8 @@ export function RegisterEngine() {
         const registerData = {
             action: 'createUser',
             gmail: gmail,
-            password: password
+            password: password,
+            confirmPassword: confirmPassword
         }
         axios
             .post(`${process.env.REACT_APP_SERVER_URL}/register`, registerData)
@@ -208,9 +210,23 @@ export function RegisterEngine() {
                 setPassword('');
                 setConfirmPassword('');
                 setInputCode('');
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION',
+                    payload: {
+                        status: 'success',
+                        title: res.data.title,
+                        message: res.data.message
+                    }
+                })
             }).catch(err => {
-            console.log('Register failed:', err);
-            setRegisterStatus(false);
+            dispatch({
+                type: 'RECEIVE_NOTIFICATION',
+                payload: {
+                    status: 'error',
+                    title: err.response.data.title,
+                    message: err.response.data.message
+                }
+            })
         });
     };
     const sendCode = async () => {
