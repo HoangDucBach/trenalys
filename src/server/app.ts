@@ -14,10 +14,7 @@ require('dotenv-flow').config({
 });
 
 const allowList = ['https://trenalys.vercel.app', 'https://trenalys.io.vn'];
-app.use(cors({
-    origin: '*',
-    credentials: true,
-}));
+app.use(cors());
 console.log(process.env.URL_CLIENT);
 app.use(express.json());
 app.use(cookieParser());
