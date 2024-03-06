@@ -33,7 +33,7 @@ function App() {
             });
     };
     useEffect(() => {
-        const intervalId = setInterval(testConnect, 5000);
+        const intervalId = setInterval(testConnect, 10000);
         return () => clearInterval(intervalId);
     }, []);
     if (!status.isConnected) {

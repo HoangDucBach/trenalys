@@ -460,10 +460,11 @@ export function SurveyEngine() {
 export function TagEngine({tag, deleteFunction, className}) {
     return (
         <div className={`container-tag-engine component-custom ${className}`}>
-            <div className="tag">
+            <div>
                 {tag}
             </div>
-            <button className="tag-delete button-custom" onClick={deleteFunction}>
+            <button className="tag-delete button-custom"
+                    style={{boxShadow: 'none', backgroundColor: 'transparent'}} onClick={deleteFunction}>
                 <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" clipRule="evenodd" d="M13 1.5L1 13.5ZM1 1.5L13 13.5Z" fill="#D8A353"/>
                     <path d="M13 1.5L1 13.5M1 1.5L13 13.5" stroke="#6E6E6E" strokeWidth="2" strokeLinecap="round"
@@ -478,21 +479,35 @@ export function TagEngine({tag, deleteFunction, className}) {
 export function TrendTagAddEngine({
                                       trendTags, setTrendTags
                                   }) {
+    const dispatch = useDispatch();
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 600px)'});
     const [inputValue, setInputValue] = useState('');
     const deleteTag = (tagToDelete) => {
         setTrendTags(prevTags => prevTags.filter(tag => tag.key !== tagToDelete));
     };
 
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' || e.keyCode === 9) {
             const newTag = inputValue.trim();
             if (newTag.length >= 10) {
-                throw new Error('Tag is too long');
-            }
-            if (trendTags.some(tag => tag.key === newTag)) {
-                throw new Error('Tag already exists');
-            }
-            if (newTag) {
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION',
+                    payload: {
+                        status: 'error',
+                        title: 'Tag is too long',
+                        message: 'Tag must be less than 10 characters'
+                    }
+                });
+            } else if (trendTags.some(tag => tag.key === newTag)) {
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION',
+                    payload: {
+                        status: 'error',
+                        title: 'Tag is existed',
+                        message: 'Tag is already existed'
+                    }
+                });
+            } else if (newTag) {
                 setTrendTags([...trendTags, <TagEngine
                     key={newTag}
                     tag={newTag}
@@ -515,6 +530,15 @@ export function TrendTagAddEngine({
                     id={'input-trend-tag-add'}
                     placeholder="Type your tag"
                 />
+                {isTabletOrMobile &&
+                    <button style={{all: 'unset'}} onClick={handleKeyDown}>
+                        <svg width="36" height="37" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M32 0.5H4C1.79 0.5 0 2.29 0 4.5V32.5C0 34.71 1.79 36.5 4 36.5H32C34.21 36.5 36 34.71 36 32.5V4.5C36 2.29 34.21 0.5 32 0.5ZM28 20.5H20V28.5H16V20.5H8V16.5H16V8.5H20V16.5H28V20.5Z"
+                                fill="#6946CB"/>
+                        </svg>
+                    </button>
+                }
             </div>
         </div>
     );
@@ -522,7 +546,7 @@ export function TrendTagAddEngine({
 
 // VOTE ENGINE
 export function ElectionBallotEngine({
-                                        trend,
+                                         trend,
                                          ballot,
                                          isVoted = false,
                                          typeInput = 'checkbox',
@@ -578,21 +602,35 @@ export function ElectionBallotEngine({
 export function ElectionBallotAddEngine({
                                             votes, setVotes
                                         }) {
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 600px)'});
+    const dispatch = useDispatch();
     const [inputValue, setInputValue] = useState('');
     const deleteElectionBallot = (voteToDelete) => {
         setVotes(prevVote => prevVote.filter(vote => vote.key !== voteToDelete));
     };
 
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' || e.keyCode === 9 || e.type === 'click') {
             const newVote = inputValue.trim();
             if (newVote.length >= 30) {
-                throw new Error('Vote is too long');
-            }
-            if (votes.some(tag => tag.key === newVote)) {
-                throw new Error('Vote already exists');
-            }
-            if (newVote) {
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION',
+                    payload: {
+                        status: 'error',
+                        title: 'Vote is too long',
+                        message: 'Please type another vote'
+                    }
+                })
+            } else if (votes.some(tag => tag.key === newVote)) {
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION',
+                    payload: {
+                        status: 'error',
+                        title: 'Vote already exists',
+                        message: 'Please type another vote'
+                    }
+                })
+            } else if (newVote) {
                 setVotes([...votes,
                     <TagEngine
                         key={newVote}
@@ -617,6 +655,15 @@ export function ElectionBallotAddEngine({
                     id={'input-vote-tag-add'}
                     placeholder="Add your election ballot"
                 />
+                {isTabletOrMobile &&
+                    <button style={{all: 'unset'}} onClick={handleKeyDown}>
+                        <svg width="36" height="37" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M32 0.5H4C1.79 0.5 0 2.29 0 4.5V32.5C0 34.71 1.79 36.5 4 36.5H32C34.21 36.5 36 34.71 36 32.5V4.5C36 2.29 34.21 0.5 32 0.5ZM28 20.5H20V28.5H16V20.5H8V16.5H16V8.5H20V16.5H28V20.5Z"
+                                fill="#6946CB"/>
+                        </svg>
+                    </button>
+                }
             </div>
         </div>
     );

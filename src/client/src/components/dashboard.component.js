@@ -287,10 +287,6 @@ export function DashboardCreateTrendFormMain() {
                     </button>
                 </div>
             </CustomForm>
-            <CustomForm
-            >
-
-            </CustomForm>
         </div>
     );
 }

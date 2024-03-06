@@ -16,6 +16,7 @@
   right: 0;
   top: 138px;
   transition: transform 0.5s cubic-bezier(0.77, 0, 0.3, 1.5);
+  z-index: 9999;
 
   & .container-status-notification {
     flex-direction: row;

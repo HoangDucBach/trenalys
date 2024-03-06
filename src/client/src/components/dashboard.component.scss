@@ -155,6 +155,7 @@
 
 // CREATE TREND FORM
 .dashboard-create-trend-form {
+
   animation: slideInUp 1s ease-out;
 
   & .dashboard-title {
@@ -163,6 +164,11 @@
 }
 
 .dashboard-create-trend-form-main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   #create-trend-form__input--short-description {
     height: 2em;
   }
