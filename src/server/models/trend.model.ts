@@ -49,8 +49,8 @@ export class TrendManager {
         }
     }
     static async updateTrend(trend: Trend): Promise<boolean> {
-        const query = 'UPDATE trends SET name = $1, short_description = $2, description = $3, time_created = $4, tags = $5, max_votes = $6 WHERE id = $7';
-        const values = [trend.name, trend.shortDescription, trend.description, trend.timeCreated, trend.tags, trend.maxVotes, trend.id];
+        const query = 'UPDATE trends SET name = $1, short_description = $2, description = $3, time_created = $4, tags = $5 WHERE id = $6';
+        const values = [trend.name, trend.shortDescription, trend.description, trend.timeCreated, trend.tags,trend.id];
         try {
             await databaseManager.query(query, values);
             return true;
