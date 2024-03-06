@@ -15,6 +15,7 @@ require('dotenv-flow').config({
 
 app.use(cors({
     origin: function (origin, callback) {
+        if(!origin) return callback(null, true);
         if (['https://trenalys.vercel.app', 'https://trenalys.io.vn'].indexOf(origin) !== -1) {
             callback(null, true)
         } else {
