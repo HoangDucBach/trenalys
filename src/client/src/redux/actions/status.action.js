@@ -24,24 +24,40 @@ export const checkLogin = (isLogged) => {
         isLogged
     }
 }
-export const login = (gmail) => {
+export const login = (loginData) => {
     return {
-        type:"LOGIN",
-        gmail,
+        type: "LOGIN",
+        loginData,
     }
 }
 export const logout = () => {
     return {
-        type:"LOGOUT",
+        type: "LOGOUT",
     }
 }
 export const connect = () => {
     return {
-        type:"CONNECT"
+        type: "CONNECT"
     }
 }
+export const search = (input) => {
+    return {
+        type: "SEARCH",
+        input
+    }
+};
 export const disconnect = () => {
     return {
-        type:"DISCONNECT"
+        type: "DISCONNECT"
+    }
+}
+export const receiveNotification = (status, title, message) => {
+    return {
+        type: "RECEIVE_NOTIFICATION",
+        notification: {
+            status,
+            title,
+            message
+        }
     }
 }

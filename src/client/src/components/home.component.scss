@@ -1,11 +1,15 @@
 @import "../scss/_variables.scss";
+@import "../scss/_animation.scss";
+@import "../scss/_responsive.scss";
 
 .home-component {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  padding: 0 30px;
+  height: 100%;
+  padding-left: 20vw;
+  padding-right: 20vw;
+  //overflow: scroll;
 }
 
 .home-main {
@@ -15,6 +19,7 @@
   justify-content: flex-start;
   height: 100%;
   align-items: center;
+
 }
 
 .home-demo {
@@ -31,8 +36,10 @@
   gap: $spacing-normal;
   flex-direction: column;
   align-items: center;
-  padding: 70px 25%;
+  padding: 10vh 10% 50%;
   min-width: 200px;
+  animation: slideInUp 1s ease-out;
+
   & * {
     text-align: center;
   }
@@ -65,12 +72,39 @@
       color: $color-05;
     }
   }
-  & .button-custom{
+
+  & .button-custom {
     & .button-custom__icon {
       display: flex;
       height: fit-content;
-        width: fit-content;
+      width: fit-content;
     }
+  }
+
+}
+
+.container-home-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .container-description {
+    flex: 1;
+    font-size: $size-text-normal;
+
+    .headline {
+      font-size: $size-text-xxxxlarge;
+    }
+  }
+
+  .container-image {
+    flex: 1;
+  }
+
+  @include for-mobile {
+    flex-direction: column !important;
+    text-align: center;
   }
 }
 
@@ -78,8 +112,6 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-
-  flex-shrink: 1;
 }
 
 .home-login-incorrect-message {
@@ -95,6 +127,100 @@
   width: 300px;
 }
 
-.button-custom, #button-explore {
-  color: $color-60;
+.button-custom {
+  & #button-explore {
+    color: $color-60;
+  }
+
+  &.button-about {
+    background-color: transparent;
+    border: 2px solid $color-highlight;
+    color: $color-highlight;
+    box-shadow: none;
+  }
+}
+
+.about-component {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  padding: 10vh 20vw;
+  gap: $spacing-xlarge;
+  animation: slideInUp 1s ease-out;
+
+  .container-detail {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-normal;
+    align-items: flex-start;
+    width: fit-content;
+
+    &__title {
+      color: $color-30;
+      font-size: $size-text-xxxlarge;
+      font-weight: 900;
+    }
+
+    &__subtitle {
+      color: $color-highlight;
+      font-size: $size-text-xlarge;
+      font-weight: 500;
+    }
+
+    &__description {
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-normal;
+      justify-content: space-between;
+      width: 100%;
+      color: $color-05;
+      font-size: $size-text-normal;
+      font-weight: 500;
+
+      &__item {
+        * {
+          color: $color-05;
+        }
+
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-small;
+        width: 100%;
+      }
+    }
+  }
+
+  .container-section {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xlarge;
+    width: 100%;
+    align-items: center;
+
+    &__section {
+      display: flex;
+      flex-direction: column;
+
+      &__title {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-normal;
+
+        h3 {
+          color: $color-30;
+          font-size: $size-text-xlarge;
+          font-weight: 700;
+        }
+      }
+
+      &__description {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: $spacing-normal;
+        width: 100%;
+      }
+    }
+  }
 }

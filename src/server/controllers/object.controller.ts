@@ -1,78 +1,61 @@
 import {AObject} from "./interface.controller";
 
-export class TrendItem extends AObject {
-    private numberOfVotes: number;
-
-    public increaseVote(): void {
-        this.numberOfVotes++;
+export class ElectionBallot extends AObject {
+    public readonly timeCreated: Date;
+    public readonly numberOfVotes: number;
+    public isVoted: boolean;
+    public trendId: number;
+    constructor(ballot:any) {
+        super();
+        this.id = ballot.id;
+        this.name = ballot.name;
+        this.timeCreated = ballot.time_created;
+        this.numberOfVotes = ballot.number_of_votes;
+        this.isVoted = ballot.is_voted;
+        this.trendId = ballot.trend_id;
     }
-
-    public decreaseVote(): void {
-        this.numberOfVotes--;
-    }
-}
-
-export class TrendTag extends AObject {
-
 }
 
 export class Trend extends AObject {
-    private items: TrendItem[];
-    private description: string;
-    private timeCreated: Date;
-    private trendTags: TrendTag[];
-    private numberOfVotes: number;
-
-    public addTrendItem(item: TrendItem): void {
-        this.items.push(item);
+    public readonly description: string;
+    public readonly timeCreated: Date;
+    public readonly tags: string[];
+    public readonly numberOfVotes: number;
+    public readonly shortDescription: string;
+    public readonly maxVotes: number;
+    electionBallots: ElectionBallot[];
+    constructor(trend:any) {
+        super();
+        this.id = trend.id;
+        this.name = trend.name;
+        this.description = trend.description;
+        this.timeCreated = trend.time_created;
+        this.tags = trend.tags;
+        this.numberOfVotes = trend.number_of_votes;
+        this.electionBallots = trend.election_ballots;
+        this.shortDescription = trend.short_description;
+        this.maxVotes = trend.max_votes;
     }
-
-    public removeTrendItem(item: TrendItem): void {
-        this.items = this.items.filter(i => i !== item);
+    public setElectionBallots(electionBallots: ElectionBallot[]): Trend {
+        this.electionBallots = electionBallots;
+        return this;
     }
-
-    public increaseVote(): void {
-        this.numberOfVotes++;
-    }
-
-    public decreaseVote(): void {
-        this.numberOfVotes--;
-    }
-
 }
 
 export class User extends AObject {
     private gmail: string;
     private password: string;
-    private trendsFollowed: Trend[];
-
-    public followTrend(trend: Trend): void {
-        this.trendsFollowed.push(trend);
+    constructor(user:any) {
+        super();
+        this.id = user.id;
+        this.name = user.name;
     }
-
-    public unfollowTrend(trend: Trend): void {
-        this.trendsFollowed = this.trendsFollowed.filter(t => t !== trend);
-    }
-
-    public changePassword(password: string): void {
-        this.password = password;
-    }
-
-    public changeGmail(gmail: string): void {
-        this.gmail = gmail;
-    }
-
     public login(gmail: string, password: string): boolean {
         return this.gmail === gmail && this.password === password;
     }
-
     public logout(): void {
         this.gmail = '';
         this.password = '';
-    }
-
-    public voteTrendItem(trendItem: TrendItem): void {
-        trendItem.increaseVote();
     }
 
 }

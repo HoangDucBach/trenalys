@@ -1,6 +1,7 @@
 export class UserDatabaseStatus {
     public static ERROR_EMAIL_EXISTS = new Error('Error: Email already exists in database');
     public static ERROR_USER_LOGIN = new Error('Error: Invalid credentials');
+    public static ERROR_PASSWORD_MISMATCH: Error = new Error('Error: Passwords do not match');
 
     public static SUCCESS_USER_CREATED = 'User created successfully';
     public static SUCCESS_USER_LOGIN = 'User login successful';
