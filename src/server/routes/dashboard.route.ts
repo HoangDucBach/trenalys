@@ -7,15 +7,16 @@ router.post('/', (req, res) => {
 });
 router.post('/create-trend-form', async (req, res) => {
     const {
-        trendTitle,
+        trendName,
         trendDescription,
         trendTimeCreated,
         trendTags,
-        trendElectionBallots
+        trendElectionBallots,
+        trendShortDescription
     } = req.body;
     const trendId = await TrendManager.getNextTrendId();
     try {
-        const trend = await TrendManager.createTrend(trendTitle, trendDescription, trendTimeCreated, trendTags);
+        const trend = await TrendManager.createTrend(trendName, trendShortDescription, trendDescription, trendTimeCreated, trendTags);
         for (const ballot of trendElectionBallots) {
             await ElectionBallotManager.createElectionBallot(trendId, ballot);
         }
@@ -30,9 +31,17 @@ router.post('/create-trend-form', async (req, res) => {
     }
 });
 router.get('/home/get-trends', async (req, res) => {
+    const sortType = req.query.sortType;
+    const sortOrder = req.query.sortOrder;
+    console.log(sortType, sortOrder);
     try {
-        const trends = await TrendManager.getAllTrends();
-        res.status(200).json({success: true, message: 'Trends fetched successfully', data: trends});
+        if (sortType && sortOrder && typeof sortType === 'string' && typeof sortOrder === 'string') {
+            const trends = await TrendManager.getTrendsOrderBy(sortType, sortOrder);
+            res.status(200).json({success: true, message: 'Trends fetched successfully', data: trends});
+        } else {
+            const trends = await TrendManager.getAllTrends();
+            res.status(200).json({success: true, message: 'Trends fetched successfully', data: trends});
+        }
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
     }

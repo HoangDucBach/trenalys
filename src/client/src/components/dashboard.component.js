@@ -10,13 +10,40 @@ import {
 import axios from "axios";
 import {useEffect, useState} from "react";
 import RequireAuth from "./require.component";
-import {CustomComponent, CustomHeader} from "./component.component";
-import {Link, useLocation} from "react-router-dom";
-import {SVGIconWithBackground} from "./global.component";
+import {CustomComponent, CustomForm, CustomHeader} from "./component.component";
+import {Link, NavLink, useLocation, useNavigate} from "react-router-dom";
+import {SVGIcon} from "./global.component";
 import {StatusGraphComponent, TrendGraph} from "./graph.component";
 import Select from "react-select";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
+/*
+* This is the main dashboard that will be used to wrap order child dashboard.
+* -- DashboardComponent
+* -- DashboardHeaderTop
+* -- DashboardHeaderLeft
+* -- DashboardHomeMain
+*
+* -- DashboardHomeComponent
+* -- DashboardCreateTrendFormMain
+*
+* -- DashboardCreateTrendFormComponent
+* -- DashboardTrendMain
+* -- DashboardTrendComponent
+*
+* -- DashboardTrendGraphMain
+* -- DashboardTrendGraphComponent
+*
+* -- DashboardTrendElectionBallotMain
+* -- DashboardTrendElectionBallotComponent
+*
+* -- DashboardTrendElectionBallotAddMain
+* -- DashboardTrendElectionBallotAddComponent
+*
+* -- DashboardTrendElectionBallotVoteMain
+* -- DashboardTrendElectionBallotVoteComponent
+*
+ */
 export function DashboardComponent({children, className}) {
     return (
         <RequireAuth>
@@ -48,24 +75,20 @@ export function DashboardHeaderTop({title, menuEngine = true}) {
 export function DashboardHeaderLeft() {
     return (
         <div className="dashboard-header-left">
-            <div className="container-menu">
-                <div className="container-menu-item">
-                    <div className="menu-item-img">
-                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M6.98398 19.0233V15.9656C6.98398 15.1851 7.65492 14.5523 8.48256 14.5523H11.508C11.9055 14.5523 12.2866 14.7012 12.5677 14.9662C12.8487 15.2313 13.0066 15.5908 13.0066 15.9656V19.0233C13.0041 19.3478 13.139 19.6599 13.3814 19.8902C13.6239 20.1205 13.9537 20.25 14.2978 20.25H16.3619C17.3259 20.2523 18.2513 19.8928 18.9339 19.2508C19.6164 18.6088 20 17.737 20 16.8278V8.11685C20 7.38246 19.6548 6.68584 19.0575 6.21467L12.0358 0.925869C10.8144 -0.00143817 9.06433 0.0285022 7.87936 0.996979L1.01791 6.21467C0.392359 6.67195 0.0184761 7.37063 0 8.11685V16.8189C0 18.7138 1.62882 20.25 3.63808 20.25H5.65504C6.36971 20.25 6.95052 19.7062 6.9557 19.0322L6.98398 19.0233Z"
-                                fill="#222222"/>
-                        </svg>
+            <div className="dashboard-header-left__menu">
+                <div className="dashboard-header-left__menu-item">
+                    <div className="dashboard-header-left__menu-item-icon">
+                        <NavLink to="/dashboard/home" activeClassName="active">
+                            <SVGIcon icon='home' backgroundColor='transparent' color='#222222'/>
+                        </NavLink>
                     </div>
                 </div>
 
-                <div className="container-menu-item">
-                    <div className="menu-item-img">
-                        <svg width="20" height="26" viewBox="0 0 20 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M7.31058 17.1873C9.11017 17.0423 10.918 17.0423 12.7176 17.1873C13.6976 17.2444 14.6729 17.367 15.6374 17.5543C17.7245 17.9769 19.0871 18.6664 19.6711 19.7785C20.1096 20.6464 20.1096 21.6797 19.6711 22.5476C19.0871 23.6597 17.7786 24.3937 15.6158 24.7718C14.652 24.9661 13.6765 25.0925 12.696 25.1499C11.7876 25.25 10.8792 25.25 9.96003 25.25H8.30547C7.95942 25.2055 7.62419 25.1833 7.29977 25.1833C6.31922 25.1328 5.34346 25.0102 4.37997 24.8163C2.29285 24.4159 0.930279 23.7042 0.346319 22.5921C0.120889 22.1613 0.0020426 21.68 0.000130272 21.1908C-0.00443039 20.6986 0.110822 20.2131 0.335505 19.7785C0.90865 18.6664 2.27122 17.9435 4.37997 17.5543C5.3477 17.3643 6.3268 17.2417 7.31058 17.1873ZM10.0033 0.25C13.6286 0.25 16.5674 3.27228 16.5674 7.00045C16.5674 10.7286 13.6286 13.7509 10.0033 13.7509C6.37801 13.7509 3.43914 10.7286 3.43914 7.00045C3.43914 3.27228 6.37801 0.25 10.0033 0.25Z"
-                                fill="#222222"/>
-                        </svg>
+                <div className="dashboard-header-left__menu-item">
+                    <div className="dashboard-header-left__menu-item-icon">
+                        <NavLink to="/profile" activeClassName="active">
+                            <SVGIcon icon='profile' backgroundColor='transparent' color='#222222'/>
+                        </NavLink>
                     </div>
                 </div>
             </div>
@@ -74,31 +97,44 @@ export function DashboardHeaderLeft() {
 }
 
 export function DashboardHomeMain() {
+    const server = useSelector(state => state.server);
     const [trends, setTrends] = useState([]);
+
+    const sortType = server.dashboard.home.sortType;
+    const sortOrder = server.dashboard.home.sortOrder;
 
     useEffect(() => {
         async function getTrends() {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/dashboard/home/get-trends`);
-                console.log('data:', response.data.data);
-                setTrends(response.data.data);
-            } catch (error) {
-                console.error('Error fetching trends:', error);
-            }
+            if (!sortOrder || !sortType) return;
+            await axios
+                .get(`${process.env.REACT_APP_SERVER_URL}/dashboard/home/get-trends`,
+                    {
+                        params: {
+                            sortType: server.dashboard.home.sortType,
+                            sortOrder: server.dashboard.home.sortOrder
+                        }
+                    }
+                ).then(res => {
+                    setTrends(res.data.data);
+                }).catch(err => {
+                    console.error('err:', err);
+                })
+            ;
         }
 
-        getTrends().then(res => console.log('trends:', trends));
-    }, []);
+        getTrends().then();
+    }, [sortOrder, sortType]);
     return (
         <div className="dashboard-home-main">
             <div className="container-trend-card-engine">
-                {trends && trends.map(trend => {
-                    return (
-                        <TrendCardEngine
-                            trend={trend}
-                        />
-                    );
-                })
+                {
+                    trends && trends.map(trend => {
+                        return (
+                            <TrendCardEngine
+                                trend={trend}
+                            />
+                        );
+                    })
                 }
             </div>
         </div>
@@ -107,7 +143,7 @@ export function DashboardHomeMain() {
 }
 
 
-export function DashboardHomeComponent({children}) {
+export function DashboardHomeComponent() {
     return (
         <DashboardComponent>
             <DashboardHeaderTop title={"Home"} menuEngine={true}/>
@@ -117,69 +153,88 @@ export function DashboardHomeComponent({children}) {
 }
 
 export function DashboardCreateTrendFormMain() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [shortDescription, setShortDescription] = useState('');
     const [trendTags, setTrendTags] = useState([]);
-    const [newTag, setNewTag] = useState('');
     const [electionBallots, setElectionBallots] = useState([]);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = {
-            trendTitle: title,
+            trendName: title,
             trendDescription: description,
             trendTimeCreated: new Date().toISOString(),
             trendTags: trendTags.map(tag => tag.props.tag),
             trendElectionBallots: electionBallots.map(ballot => ballot.props.tag),
+            trendShortDescription: shortDescription
         };
 
-        try {
-            const postUrl = `${process.env.REACT_APP_SERVER_URL}/dashboard/create-trend-form`;
-            const response = await axios.post(postUrl, formData);
-            console.log('Form submitted successfully:', response.data);
-            await window.location.reload();
-        } catch (error) {
-            console.error('Error submitting form:', error.message);
-        }
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/dashboard/create-trend-form`, formData)
+            .then(res => {
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION', payload: {
+                        status: 'success',
+                        title: res.data.title,
+                        message: res.data.message
+                    }
+                })
+                setTimeout(() => {
+                    navigate('/dashboard/home');
+                }, 3000);
+            })
+            .catch(err => {
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION',
+                    payload: {
+                        status: 'error',
+                        title: err.response.data.title,
+                        message: err.response.data.message
+                    }
+                })
+                console.error('err:', err);
+            });
     }
-    useEffect(() => {
-        console.log('trendTags:', trendTags);
-    }, [trendTags]);
     return (
         <div className="dashboard-create-trend-form-main">
-            <form
-                className="custom-component container-create-trend-form"
+            <CustomForm
+                className="create-trend-form"
                 onSubmit={handleSubmit}
             >
                 <CustomComponent
                     title='Detail'
                     description='Create a trend to survey opinions'
                     svg={
-                        <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect y="0.5" width="25" height="25" rx="5" fill="#222222"/>
-                            <circle cx="12.5" cy="8" r="2.5" fill="#FDFDFD"/>
-                            <rect x="10" y="11.5" width="5" height="10" rx="2.5" fill="#FDFDFD"/>
-                        </svg>
+                        <SVGIcon
+                            icon={'detail'}
+                            backgroundColor='#222222'
+                            color='#ffffff'
+                        />
                     }
                 >
                     <InputEngine
                         typeInput={'input'}
                         title='Title'
-                        placeholder='Type your trend title'
+                        placeholder='Max 20 characters'
                         type='text'
                         id='create-trend-form__input--title'
                         value={title}
                         setValue={setTitle}
+                        maxLength={20}
                     />
                     <InputEngine
                         typeInput={'textarea'}
                         title='Short description'
-                        placeholder='Type your short description ( max 10 characters )'
+                        placeholder='Max 85 characters'
                         type='text'
-                        id='create-trend-form__input--title'
+                        id='create-trend-form__input--short-description'
                         value={shortDescription}
                         setValue={setShortDescription}
+                        maxLength={85}
                     />
                     <InputEngine
                         typeInput={'textarea'}
@@ -189,6 +244,7 @@ export function DashboardCreateTrendFormMain() {
                         id='create-trend-form__input--description'
                         value={description}
                         setValue={setDescription}
+                        maxLength={85}
                     />
                 </CustomComponent>
                 <CustomComponent
@@ -230,7 +286,11 @@ export function DashboardCreateTrendFormMain() {
                     <button type='submit' className="button-custom" id='create-trend-form__button--create'>Create
                     </button>
                 </div>
-            </form>
+            </CustomForm>
+            <CustomForm
+            >
+
+            </CustomForm>
         </div>
     );
 }
@@ -250,7 +310,6 @@ function DashboardTrendMain() {
     const {id} = useLocation().state;
 
     const status = useSelector(state => state.status);
-
     // GRAPH
     const [selectedGraph, setSelectedGraph] = useState('bar');
     const graphOptions = [
@@ -283,7 +342,6 @@ function DashboardTrendMain() {
         }),
         menuList: (provided, state) => ({
             ...provided,
-            backgroundColor: '#ffffff',
         }),
 
     };
@@ -295,18 +353,16 @@ function DashboardTrendMain() {
     }, [selectedGraph]);
     useEffect(() => {
         async function getTrend() {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/trend/${id}`,
-                    {
-                        params: {
-                            gmail: status.gmail,
-                        }
-                    });
-                setTrend(response.data.trend);
-                console.log('trend:', response.data.trend);
-            } catch (error) {
-                console.error('Error fetching trend:', error);
-            }
+            await axios.get(`${process.env.REACT_APP_SERVER_URL}/trend/${id}`,
+                {
+                    params: {
+                        gmail: status.gmail,
+                    }
+                }).then(res => {
+                setTrend(res.data.trend);
+            }).catch(err => {
+                console.error(err);
+            });
         }
 
         getTrend().then(() => setIsLoading(false));
@@ -321,48 +377,74 @@ function DashboardTrendMain() {
         </div>);
     return (
         <div className="dashboard-trend-main">
-            <div className="container-trend__header">
-                <div className="container-trend-title-and-id">
+            <div className="dashboard-trend-main__header">
+                <div className="dashboard-trend-main__header__container-title-id">
                     <h1 className="title-custom">{trend.name}</h1>
-                    <div className="trend-id">
+                    <div className="dashboard-trend-main__header__id">
                         #{trend.id}
                     </div>
                 </div>
                 <button className="button-custom">Follow</button>
             </div>
-            <div className="container-trend__main">
+            <div className="dashboard-trend-main__main">
+                <div className="container-trend-main__main__headline">
+                    <div className="dashboard-trend-main__main__headline-tags">
+                        {
+                            trend.tags.map(tag => <div className="tag button-custom">{tag}</div>)
+                        }
+                    </div>
+                    <div className="dashboard-trend-main__main__headline-statistics">
+                        <div className="dashboard-trend-main__main__headline-statistics--item">
+                            <SVGIcon
+                                icon={'vote'}
+                                backgroundColor='transparent'
+                                color='#222222'
+                            />
+                            <div className="dashboard-trend-main__main__headline-statistics--item-value">
+                                {trend.numberOfVotes} votes
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <CustomComponent
                     title='Detail'
-                    svg={<SVGIconWithBackground icon={'detail'}/>}
+                    svg={<SVGIcon icon={'detail'}/>}
+                    className='dashboard-trend-main__detail'
                 >
-                    <div className="trend-description">
+                    <div className="dashboard-trend-main__description">
                         {trend.description}
                     </div>
                 </CustomComponent>
                 <CustomComponent
                     title='Graph'
-                    svg={<SVGIconWithBackground icon={'graph'}/>}
-                    className={'trend-graph'}
+                    svg={<SVGIcon icon={'graph'}/>}
+                    className='dashboard-trend-main__graph'
                 >
-                    <CustomHeader>
+                    <CustomHeader className='dashboard-trend-main__graph-header'>
                         <StatusGraphComponent trend={trend} typeGraph={selectedGraph}/>
                         <Select
                             defaultValue={graphOptions[0]}
                             options={graphOptions}
                             onChange={handleChangeSelectedGraph}
-                            className='trend-graph__select'
+                            className='dashboard-trend-main__graph-select'
                             styles={graphOptionSelectStyle}
                         />
                     </CustomHeader>
-                    <TrendGraph trend={trend} type={selectedGraph}/>
+                    <TrendGraph trend={trend} type={selectedGraph} className='dashboard-trend-main__graph-content'/>
                 </CustomComponent>
                 <CustomComponent
                     title='Election Ballots'
-                    svg={<SVGIconWithBackground icon={'election_ballot'}/>}
-                    className={'trend-election-ballots'}
+                    svg={<SVGIcon icon={'election_ballot'}/>}
+                    className='dashboard-trend-main__election-ballots'
                 >
                     {
-                        trend.electionBallots.map(ballot => (<ElectionBallotEngine ballot={ballot} isVoted={ballot.isVoted}/>))
+                        trend.electionBallots.map(ballot => (
+                            <ElectionBallotEngine
+                                trend={trend}
+                                ballot={ballot} isVoted={ballot.isVoted}
+                                className='dashboard-trend-main__election-ballot'
+                                typeInput={'checkbox'}
+                            />))
                     }
                 </CustomComponent>
             </div>
@@ -372,8 +454,91 @@ function DashboardTrendMain() {
 
 export function DashboardTrendComponent({className}) {
     return (
-        <DashboardComponent className={`dashboard-trend ${className}`}>
+        <DashboardComponent className={`dashboard-trend-component ${className}`}>
             <DashboardTrendMain/>
+        </DashboardComponent>
+    );
+}
+
+function DashboardProfileMain() {
+    const status = useSelector(state => state.status);
+    const dispatch = useDispatch();
+
+    const [gmail, setGmail] = useState(status.gmail);
+    const [password, setPassword] = useState(status.password);
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = {
+            gmail,
+            password
+        };
+        const postUrl = `${process.env.REACT_APP_SERVER_URL}/profile/change`;
+        await axios.post(postUrl, formData)
+            .then(res => {
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION', payload: {
+                        status: 'success',
+                        title: res.data.title,
+                        message: res.data.message
+                    }
+                });
+                dispatch({
+                    type: 'LOGIN',
+                    payload: formData
+                });
+            })
+            .catch(err => {
+                dispatch({
+                    type: 'RECEIVE_NOTIFICATION',
+                    payload: {
+                        status: 'error',
+                        title: err.response.data.title,
+                        message: err.response.data.message
+                    }
+                })
+            });
+    }
+    return (
+        <div className="dashboard-profile-main">
+            <CustomForm
+                className='dashboard-profile'
+                onSubmit={handleSubmit}
+            >
+                <CustomComponent className='background-profile'>
+                    <div className="background-profile__title">
+                        {status.gmail.substring(0, 1).toUpperCase()}
+                    </div>
+                </CustomComponent>
+                <InputEngine
+                    typeInput={'input'}
+                    title='Gmail'
+                    placeholder='Type your username'
+                    type='text'
+                    value={gmail}
+                    setValue={setGmail}
+                    readOnly={true}
+                />
+                <InputEngine
+                    typeInput={'input'}
+                    title='Password'
+                    placeholder='Type your username'
+                    type='text'
+                    value={password}
+                    setValue={setPassword}
+                />
+                <button className="button-custom">Save</button>
+            </CustomForm>
+        </div>
+    )
+}
+
+export function DashboardProfileComponent() {
+    return (
+        <DashboardComponent className={`dashboard-profile`}>
+            <DashboardHeaderTop title={"Profile"} menuEngine={false}/>
+            <DashboardProfileMain/>
         </DashboardComponent>
     );
 }

@@ -1,10 +1,25 @@
 @import "../scss/_variables.scss";
-
+@import "../scss/_animation.scss";
+@import "../scss/_responsive.scss";
+// DASHBOARD WRAP
 .dashboard {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
+  @include for-mobile {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+}
+
+.dashboard-title {
+  font-size: 50px;
+  font-weight: 700;
+  color: $color-30;
+  width: 100%;
 }
 
 .dashboard-header-top {
@@ -12,9 +27,32 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  @include for-mobile {
+    .container-dashboard-engine {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+
+      & > :nth-child(1) {
+        grid-row: 1 / 2;
+        grid-column: 1 / 3;
+      }
+
+      & > :nth-child(2) {
+        grid-row: 2 / 3;
+      }
+
+      & > :nth-child(3) {
+        grid-row: 2 / 3;
+      }
+    }
+
+  }
 }
 
 .dashboard-header-left {
+  position: sticky;
+  top: 50%;
   padding: $padding-large;
   display: flex;
   flex-direction: column;
@@ -22,7 +60,7 @@
   justify-content: center;
   height: 100%;
 
-  .container-menu {
+  &__menu {
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -33,11 +71,36 @@
     height: fit-content;
     padding: $padding-normal;
     background-color: $color-component;
-    border-radius: $radius-normal;
-    box-shadow: 0 0 20px rgb(82 82 82 / 25%);;
+    border-radius: 100px;
+    box-shadow: 0 0 20px rgb(82 82 82 / 80%);
 
+    &-item-icon svg {
+      path {
+        fill: $color-05;
+      }
+    }
+
+    &-item-icon a.active svg {
+      path {
+        fill: $color-highlight;
+      }
+    }
   }
 
+  @include for-mobile {
+    position: sticky;
+    bottom: 0;
+    padding: $padding-normal;
+    width: 100%;
+    z-index: 9999;
+
+    &__menu {
+      box-shadow: $shadow-normal;
+      flex-direction: row;
+      justify-content: space-evenly;
+      padding: $padding-normal;
+    }
+  }
 }
 
 .dashboard-main {
@@ -48,16 +111,10 @@
   height: 100%;
   padding: $padding-normal;
   gap: $spacing-normal;
+  overflow: auto;
 }
 
 .dashboard-home-main {
-  width: 100%;
-}
-
-.dashboard-title {
-  font-size: 50px;
-  font-weight: 700;
-  color: $color-30;
   width: 100%;
 }
 
@@ -74,7 +131,7 @@
   }
 
   & > :nth-child(2) {
-    flex: 1;
+    flex: 1.25;
   }
 
   & > :nth-child(3) {
@@ -83,20 +140,33 @@
 }
 
 .container-trend-card-engine {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: $spacing-normal;
+  justify-content: center;
+  justify-items: center;
+
+  & > :nth-child(n) {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
 }
 
 // CREATE TREND FORM
 .dashboard-create-trend-form {
+  animation: slideInUp 1s ease-out;
+
   & .dashboard-title {
     text-align: center;
   }
 }
 
 .dashboard-create-trend-form-main {
+  #create-trend-form__input--short-description {
+    height: 2em;
+  }
+
   & #create-trend-form__input--description {
     height: 10em;
   }
@@ -107,6 +177,7 @@
   height: fit-content;
   background-color: $color-component;
   box-shadow: $shadow-normal;
+  padding: $padding-xlarge;
 }
 
 .container-create-trend-form .custom-component {
@@ -166,6 +237,74 @@
 // DASHBOARD TREND
 .dashboard-trend-main {
   width: 100%;
+  height: 100%;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-normal;
+    width: 100%;
+
+    &__container-title-id {
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-normal;
+      align-items: center;
+    }
+
+    &__id {
+      width: fit-content;
+      height: fit-content;
+
+      font-size: $size-text-normal;
+      font-weight: 500;
+      background-color: transparent;
+
+      border-radius: $radius-normal;
+      padding: $padding-xsmall;
+
+      color: $color-highlight;
+      border: 2px solid $color-highlight;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 5vh;
+    padding: $padding-xlarge 0;
+
+    &__headline {
+      &-tags {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-normal;
+      }
+
+      &-statistics {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-normal;
+
+        &--item {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 0;
+
+          &-value {
+            font-size: $size-text-small;
+            font-weight: 300;
+          }
+        }
+      }
+    }
+  }
 
   & .container-trend__header {
     width: 100%;
@@ -190,21 +329,80 @@
     gap: $spacing-xlarge;
   }
 }
-.custom-component.trend-graph{
-    height: 300px;
+
+.tag {
+  background-color: $color-30;
+  color: $color-60;
+  font-size: $size-text-small;
+}
+
+.custom-component.trend-graph {
+  height: 300px;
+
   .trend-graph__select {
     width: 10rem;
+
     &:focus {
       outline: 1px solid $color-30 !important;
     }
   }
 }
-.custom-component.trend-election-ballots {
-  & .container-custom-component__main {
+
+.dashboard-trend-main__election-ballots
+.custom-component {
+  &__main {
     display: flex;
     flex-direction: row;
     gap: $spacing-normal;
     width: 100%;
+    height: 100%;
     flex-wrap: wrap;
+    @include for-mobile {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
+
+// PROFILE
+.dashboard-profile {
+  animation: slideInUp 1s ease-out;
+
+  .custom-form {
+    width: fit-content;
+  }
+
+  align-items: center;
+
+  .dashboard-title {
+    text-align: center;
+  }
+}
+
+.dashboard-profile-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+
+  .dashboard-profile {
+    .background-profile {
+      border-radius: $radius-normal;
+      background: linear-gradient(180deg, #6946CB 0%, #DFCCC2 100%);
+
+      .background-profile__title {
+        color: $color-60;
+        font-weight: 1000;
+        font-size: 10em;
+        text-align: center;
+      }
+    }
+  }
+
+  .input-engine {
+    .container-input {
+      background-color: transparent;
+    }
   }
 }

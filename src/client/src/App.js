@@ -1,4 +1,4 @@
-import {HomeComponent} from "./components/home.component";
+import {AboutComponent, HomeComponent} from "./components/home.component";
 import './scss/_global.scss';
 import {Provider, useDispatch, useSelector} from "react-redux";
 import {store} from "./redux/store";
@@ -17,7 +17,7 @@ import {Body, HeaderTop} from "./components/body.component";
 import {
     DashboardComponent,
     DashboardCreateTrendFormComponent, DashboardCreateTrendFormMain,
-    DashboardHomeComponent, DashboardHomeMain, DashboardTrendComponent
+    DashboardHomeComponent, DashboardHomeMain, DashboardProfileComponent, DashboardTrendComponent
 } from "./components/dashboard.component";
 
 function App() {
@@ -54,7 +54,8 @@ function App() {
                     <Route path="/" element={<HomeComponent/>}/>
                     <Route path="login" element={<LoginComponent/>}/>
                     <Route path="register" element={<RegisterComponent/>}/>
-
+                    <Route path="/profile" element={<RequireAuth><DashboardProfileComponent></DashboardProfileComponent></RequireAuth>}/>
+                    <Route path={"/about"} element={<AboutComponent/>}/>
                     <Route
                         path="dashboard"
                         element={

@@ -1,5 +1,6 @@
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip} from "chart.js";
 import {Bar, Doughnut, Pie} from "react-chartjs-2";
+import {useMediaQuery} from "react-responsive";
 
 ChartJS.register(
     CategoryScale,
@@ -16,14 +17,13 @@ const css = {
     tooltipBackground: '#AE92FF',
     tooltipFontColor: '#222222',
 }
-
 export function TrendBarGraphDemo({trend}) {
     const data = {
-        labels: trend.electionBallots.map(ballot => ballot.title),
+        labels: trend.electionBallots.map(ballot => ballot.name),
         datasets: [
             {
                 label: 'Votes',
-                data: trend.electionBallots.map(ballot => ballot.numberofvotes),
+                data: trend.electionBallots.map(ballot => ballot.numberOfVotes),
                 backgroundColor: css.colorHighlight,
                 border: 'none',
                 borderRadius: 8,
@@ -80,6 +80,8 @@ export function TrendBarGraphDemo({trend}) {
 }
 
 export function TrendGraph({trend, type}) {
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 980px)'});
+
     let data, options;
 
     function generateShortLabel(input) {
@@ -89,14 +91,14 @@ export function TrendGraph({trend, type}) {
     }
 
     if (type === 'bar') {
-        const max = Math.max(...trend.electionBallots.map(ballot => ballot.numberofvotes));
-        const roundedMax = Math.ceil(max / 1000) * 100;
+        const max = Math.max(...trend.electionBallots.map(ballot => ballot.numberOfVotes));
+        const roundedMax = Math.ceil(max / 1000) * 10;
         data = {
-            labels: trend.electionBallots.map(ballot => generateShortLabel(ballot.title)),
+            labels: trend.electionBallots.map(ballot => generateShortLabel(ballot.name)),
             datasets: [
                 {
                     label: 'Votes',
-                    data: trend.electionBallots.map(ballot => ballot.numberofvotes),
+                    data: trend.electionBallots.map(ballot => ballot.numberOfVotes),
                     backgroundColor: css.colorHighlight,
                     border: 'none',
                     borderRadius: 8,
@@ -178,10 +180,10 @@ export function TrendGraph({trend, type}) {
         };
     } else if (type === 'pie') {
         data = {
-            labels: trend.electionBallots.map(ballot => ballot.title),
+            labels: trend.electionBallots.map(ballot => ballot.name),
             datasets: [
                 {
-                    data: trend.electionBallots.map(ballot => ballot.numberofvotes),
+                    data: trend.electionBallots.map(ballot => ballot.numberOfVotes),
                     backgroundColor: [css.colorHighlight, 'rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.4)'],
                     hoverOffset: 10,
                 },
@@ -190,9 +192,10 @@ export function TrendGraph({trend, type}) {
         options = {
             plugins: {
                 legend: {
-                    position: 'right',
+                    position: isTabletOrMobile ? 'bottom' : 'right',
                     labels: {
                         boxWidth: 15,
+                        usePointStyle: true,
                         padding: 15,
                         font: {
                             size: 14,
@@ -224,7 +227,7 @@ export function TrendGraph({trend, type}) {
                     },
                 },
             },
-            maintainAspectRatio: false,
+            maintainAspectRatio: isTabletOrMobile,
             responsive: true,
         };
     }
@@ -258,7 +261,7 @@ export function StatusGraphComponent({trend, typeGraph}) {
                     </h1>
                 </div>
                 <div className="container-status-graph-component__detail">
-                    <h1 className="title-custom">{trend.numberofvotes} votes</h1>
+                    <h1 className="title-custom">{trend.numberOfVotes} votes</h1>
                 </div>
             </div>
         </div>

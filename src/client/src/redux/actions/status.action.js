@@ -24,10 +24,10 @@ export const checkLogin = (isLogged) => {
         isLogged
     }
 }
-export const login = (gmail) => {
+export const login = (loginData) => {
     return {
         type: "LOGIN",
-        gmail,
+        loginData,
     }
 }
 export const logout = () => {
@@ -40,6 +40,12 @@ export const connect = () => {
         type: "CONNECT"
     }
 }
+export const search = (input) => {
+    return {
+        type: "SEARCH",
+        input
+    }
+};
 export const disconnect = () => {
     return {
         type: "DISCONNECT"

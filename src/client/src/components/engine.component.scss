@@ -1,4 +1,5 @@
 @import "../scss/_variables.scss";
+@import "../scss/_responsive.scss";
 
 @keyframes spin {
   100% {
@@ -51,16 +52,45 @@ $spinner-color: $color-60;
   width: 100%;
   gap: $spacing-normal;
 
+  &__container-login-and-register {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-normal;
+    width: 100%;
+  }
+
+  &__container-gmail {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-normal;
+    width: 100%;
+
+    .user-avatar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 35px;
+      height: 35px;
+      min-height: 35px;
+      min-width: 35px;
+      border-radius: 50%;
+      background-color: $color-highlight;
+      color: $color-60;
+      font-weight: 700;
+    }
+    .title-custom{
+      @include for-mobile() {
+        display: none;
+      }
+    }
+  }
 }
 
-.user-status-engine__container-login-and-register {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: $spacing-normal;
-  width: 100%;
-}
 
 // INPUT ENGINE
 .input-engine {
@@ -103,7 +133,8 @@ $spinner-color: $color-60;
   padding: $padding-normal;
   border-radius: $radius-normal;
   width: 100%;
-  min-width: 400px;
+  height: 100%;
+  min-width: 300px;
 
   & .input-title {
     font-weight: 600;
@@ -176,16 +207,29 @@ $spinner-color: $color-60;
 }
 
 // SEARCH ENGINE
-.container-search {
+.component-custom.container-search {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 100%;
+  gap: $spacing-normal;
   background-color: $color-01;
 }
 
 // SORT ENGINE
+.sort-engine {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .button-custom {
+    background-color: transparent;
+    height: 100%;
+  }
+}
+
 .container-sort {
   display: flex;
   flex-direction: row;
@@ -228,6 +272,11 @@ $spinner-color: $color-60;
 }
 
 .survey-engine {
+  height: 100%;
+
+  .button-custom {
+    height: 100%;
+  }
 }
 
 .button-submit-survey {
@@ -271,6 +320,12 @@ $spinner-color: $color-60;
   &:hover {
     box-shadow: 0 0 15px 0 rgba(89, 89, 89, 0.5);
     transform: scale(1.05);
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  & > .button-custom.button-follow {
+    width: 100%;
   }
 }
 

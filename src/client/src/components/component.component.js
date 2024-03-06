@@ -1,5 +1,12 @@
 import './component.component.scss';
 
+/*
+* This is the custom components that will support the rendering of the element.
+* --CustomComponent
+* --CustomHeader
+* --CustomFooter
+* --CustomForm
+ */
 export function CustomComponent({title, svg, description, children, className}) {
     return (
         <div className={`custom-component ${className}`}>
@@ -14,7 +21,7 @@ export function CustomComponent({title, svg, description, children, className}) 
                 </div>
             </CustomHeader>
 
-            <div className="container-custom-component__main">
+            <div className="container-custom-component__main custom-component__main ">
                 {description && <div className="container-custom-component__description">{description}</div>}
                 {children}
             </div>
@@ -22,7 +29,7 @@ export function CustomComponent({title, svg, description, children, className}) 
     );
 }
 
-export function CustomHeader({children,className}) {
+export function CustomHeader({children, className}) {
     return (
         <div className={`custom-header ${className}`}>
             {children}
@@ -37,3 +44,15 @@ export function CustomFooter({children}) {
         </div>
     );
 }
+
+export function CustomForm({children, className, onSubmit}) {
+    return (
+        <form
+            className={`custom-component custom-form ${className}`}
+            onSubmit={onSubmit}
+        >
+            {children}
+        </form>
+    );
+}
+

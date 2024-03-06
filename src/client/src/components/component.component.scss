@@ -42,3 +42,13 @@
   align-items: center;
   width: 100%;
 }
+
+// CUSTOM FORM
+.custom-form {
+  width: 50vw;
+  height: fit-content;
+  background-color: $color-component;
+  box-shadow: $shadow-normal;
+  padding: $padding-xlarge;
+  min-width: fit-content;
+}

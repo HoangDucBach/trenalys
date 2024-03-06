@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 @import "variables";
-
+html{
+  scroll-behavior: smooth;
+}
 body {
   font-size: 16px;
   background-color: $color-60;
@@ -22,6 +24,7 @@ body {
   justify-content: space-evenly;
   gap: $spacing-normal;
   width: fit-content;
+  color: $color-60;
 
   font-weight: 700;
   font-size: $size-text-normal;
@@ -101,7 +104,9 @@ body {
   width: fit-content;
   height: fit-content;
 }
-
+.section-custom {
+  padding: 10vh 0;
+}
 img {
   width: 100%;
   height: auto;
@@ -112,12 +117,17 @@ a {
   text-decoration: none;
 }
 
-input {
+input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
   all: unset;
   color: $color-05;
   font-size: $size-text-normal;
   font-weight: 500;
   width: 100%;
+
+  &::selection {
+    background-color: $color-highlight;
+    color: $color-60;
+  }
 }
 
 textarea {
@@ -128,4 +138,8 @@ textarea {
   height: 5em;
   word-break: break-word;
   width: 100%;
+  &::selection {
+    background-color: $color-highlight;
+    color: $color-60;
+  }
 }

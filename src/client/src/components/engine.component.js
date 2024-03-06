@@ -4,12 +4,26 @@ import './engine.component.scss';
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {checkLogin} from "../redux/actions/status.action";
-import {Bar} from "react-chartjs-2";
 import {TrendBarGraphDemo} from "./graph.component";
+import {SVGIcon} from "./global.component";
+import Select, {components} from "react-select";
+import {useMediaQuery} from "react-responsive";
 
-export function InputEngine({type, title, placeholder, value, setValue, typeInput, id}) {
+export function InputEngine(
+    {
+        type,
+        title,
+        placeholder,
+        value,
+        setValue,
+        typeInput,
+        id,
+        className,
+        readOnly,
+        maxLength
+    }) {
     return (
-        <div className="input-engine">
+        <div className={`input-engine ${className}`}>
             <div className="container-input">
                 <div className="input-title title-custom">
                     {title}
@@ -19,6 +33,7 @@ export function InputEngine({type, title, placeholder, value, setValue, typeInpu
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     id={id}
+                    maxLength={maxLength}
                 />}
                 {typeInput === 'input' && <input
                     type={type}
@@ -26,6 +41,8 @@ export function InputEngine({type, title, placeholder, value, setValue, typeInpu
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     id={id}
+                    readOnly={readOnly}
+                    maxLength={maxLength}
                 />}
 
             </div>
@@ -43,7 +60,6 @@ export function UserStatusEngine() {
         dispatch({type: 'LOGOUT'});
     }
     useEffect(() => {
-        console.log('Status:', status);
         if (status.isLogged === true && status.gmail !== null) {
             setUsername(status.gmail.substring(0, status.gmail.indexOf('@')));
         }
@@ -55,7 +71,6 @@ export function UserStatusEngine() {
                     <Link className='title-custom' to={'/register'}>Register</Link>
                     <Link className="button-custom login-button" to={'/login'}>Login</Link>
                 </div>
-
             </div>
         )
     }
@@ -63,16 +78,13 @@ export function UserStatusEngine() {
         <div className="user-status-engine">
             <div className="user-status-engine__container-notification">
                 <div className="notification-icon">
-                    <svg width="17" height="21" viewBox="0 0 17 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M15.3616 13.9104C14.7904 14.5144 14.018 14.8949 13.1852 14.9802L13.1725 14.9815L13.1599 14.9831C10.0578 15.3812 6.91705 15.3812 3.81497 14.9831L3.79793 14.9809L3.78083 14.9793C2.94189 14.9009 2.16169 14.5228 1.5842 13.9175C1.18804 13.43 0.981497 12.8182 1.0013 12.1932L1.00181 12.1774V12.1615V11.9858C1.02976 11.5373 1.16777 11.1022 1.40397 10.7184C2.08363 9.93489 2.5537 8.99238 2.76923 7.97811L2.78277 7.9144L2.78793 7.84946C2.81793 7.47189 2.81792 7.09835 2.81791 6.76911L2.81791 6.75245C2.81791 6.4107 2.81842 6.11415 2.84062 5.82648C3.12282 3.20467 5.71645 1.25 8.44715 1.25H8.53662C11.2416 1.25 13.8879 3.21307 14.161 5.8256C14.1832 6.10879 14.1838 6.40507 14.1838 6.74911V6.76595C14.1837 7.09614 14.1837 7.47189 14.2137 7.84946L14.2185 7.90917L14.2303 7.96789C14.436 8.98829 14.9031 9.93759 15.5852 10.7244C15.8284 11.104 15.971 11.5382 15.9999 11.9867V12.1615H15.9999L16 12.1676C16.0039 12.805 15.7778 13.4233 15.3616 13.9104ZM9.64786 18.335C9.8894 18.3435 10.1277 18.3872 10.3552 18.4643C9.99434 18.908 9.46094 19.1867 8.88007 19.2263L8.85485 19.2281L8.82974 19.2311C8.13133 19.3143 7.4288 19.1208 6.87434 18.6939L6.85251 18.6771L6.82979 18.6615C6.75745 18.6119 6.69757 18.549 6.65252 18.4774C6.66016 18.4755 6.66796 18.4736 6.67594 18.4717C7.10859 18.3812 7.54954 18.3354 7.99174 18.335H9.64786Z"
-                            stroke="#222222" strokeWidth="2"/>
-                    </svg>
-
                 </div>
             </div>
-            <Link to='/dashboard/home' className="user-status-engine__container-gmail title-custom">
-                {username}
+            <Link to='/dashboard/home' className="user-status-engine__container-gmail">
+                <div className="user-avatar">
+                    {status.gmail.substring(0, 1).toUpperCase()}
+                </div>
+                <h4 className='title-custom'>{username}</h4>
             </Link>
             <div className="user-status-engine__container-log-out">
                 <div className="log-out-icon" onClick={logout}>
@@ -88,12 +100,13 @@ export function UserStatusEngine() {
 }
 
 export function LoginEngine() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [gmail, setGmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loginStatus, setLoginStatus] = useState(null);
     const [isLogging, setIsLogging] = useState(false);
 
-    const dispatch = useDispatch();
 
     const loginUser = async () => {
         setIsLogging(true);
@@ -104,18 +117,12 @@ export function LoginEngine() {
         axios
             .post(`${process.env.REACT_APP_SERVER_URL}/login`, loginData)
             .then(res => {
-                setLoginStatus(true);
                 dispatch(checkLogin(true));
                 dispatch({type: 'CHECK_LOGIN', payload: true});
-                dispatch({type: 'LOGIN', payload: loginData.gmail});
-                window.location.href = '/dashboard/home';
+                dispatch({type: 'LOGIN', payload: loginData});
+                navigate('/dashboard/home');
             })
             .catch(err => {
-                console.log('Login failed:', err);
-                setLoginStatus(false);
-                if (err.response) {
-
-                }
                 dispatch({
                     type: 'RECEIVE_NOTIFICATION',
                     payload: {
@@ -224,7 +231,6 @@ export function RegisterEngine() {
                 </div>
                 {registerStatus === false && <p className="incorrect-message">{registerError}</p>}
                 {registerStatus === true && <p className="success-message">Register successful!</p>}
-
                 <div className="container-input">
                     <div className="input-title">
                         Gmail
@@ -292,10 +298,20 @@ export function RegisterEngine() {
 }
 
 export function SearchEngine() {
-    const [searchValue, setSearchValue] = useState('');
+    const status = useSelector(state => state.status);
+    const [searchValue, setSearchValue] = useState(status.search || '');
+
     const navigate = useNavigate();
-    const search = () => {
-        navigate(`/search/${searchValue}`);
+    const dispatch = useDispatch();
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            navigate({
+                pathname: `/dashboard/home`,
+                search: `?q=${encodeURIComponent(searchValue)}`
+            });
+            dispatch({type: 'SEARCH', payload: e.target.value})
+            window.location.reload();
+        }
     }
     return (
         <div className="search-engine">
@@ -312,6 +328,7 @@ export function SearchEngine() {
                     placeholder="Search trend . . ."
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
                 />
             </div>
         </div>
@@ -319,21 +336,110 @@ export function SearchEngine() {
 }
 
 export function SortEngine() {
-    return (
-        <div className="sort-engine component">
-            <div className="container-sort component-custom">
-                <div className="sort-title">
-                    Sort by
-                </div>
-                <div className="drop-list-img">
-                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 10.625L12.25 17.375L5.5 10.625" stroke="#222222" strokeWidth="2.25"
-                              strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
-                        <circle cx="12.5" cy="12.5" r="12" stroke="#222222"/>
-                    </svg>
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const server = useSelector(state => state.server);
+    const isTabletOrMobile = useMediaQuery({query: '(max-width: 600px)'});
 
-                </div>
-            </div>
+
+    const [sortOrder, setSortOrder] = useState(server.dashboard.home.sortOrder);
+    const [sortType, setSortType] = useState(server.dashboard.home.sortType);
+    const sortOptions = [
+        {value: 'id', label: 'ID'},
+        {value: 'number_of_votes', label: 'Vote'},
+        {value: 'name', label: 'Name'},
+        {value: 'time_created', label: 'Date'},
+    ];
+
+    const handleChange = (selectedOption) => {
+        setSortType(selectedOption.value);
+    }
+    const handleSortOrder = async (e) => {
+        e.preventDefault()
+        setSortOrder(prevOrder => prevOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    useEffect(() => {
+        navigate(`${window.location.pathname}?sortType=${sortType}&sortOrder=${sortOrder}`);
+        dispatch({type: 'SORT_TRENDS', payload: {sortType, sortOrder}});
+    }, [sortOrder, sortType]);
+
+    const customStyles = {
+        dropdownIndicator: (styles) => ({
+            ...styles,
+            display: isTabletOrMobile ? 'none' : 'block',
+            padding: '8px',
+            cursor: 'pointer'
+        }),
+        indicatorSeparator: (styles) => ({
+            ...styles,
+            display: isTabletOrMobile ? 'none' : 'block',
+        }),
+        input: (styles) => ({
+            ...styles,
+            padding: '8px',
+            height: '100%',
+            width: 'fit-content',
+        }),
+        control: (provided, state) => ({
+            ...provided,
+            borderRadius: '10px',
+            fontFamily: 'DM Sans',
+            backgroundColor: '#E9E9E9',
+            width: 'fit-content',
+
+            padding: '5px',
+            border: state.isFocused ? '3px solid #6946CB' : '3px solid #E9E9E9',
+            boxShadow: 'none',
+            '&:hover': {},
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            fontFamily: 'DM Sans',
+            backgroundColor: state.isFocused ? '#6946CB' : 'transparent',
+            color: state.isFocused ? '#ffffff' : '#222222',
+        }),
+        menu: (provided, state) => ({
+            ...provided,
+            borderRadius: '10px',
+            fontFamily: 'DM Sans',
+            marginTop: 0,
+            backgroundColor: '#E9E9E9',
+
+        }),
+        menuList: (provided, state) => ({
+            ...provided,
+
+        }),
+
+
+    }
+    return (
+        <div className="sort-engine">
+            <Select
+                defaultValue={sortOptions.find(option => option.value === sortType)}
+                options={sortOptions}
+                onChange={handleChange}
+                className='trend-graph__select'
+                styles={customStyles}
+            />
+            <button
+                className="sort-engine_button--type button-custom"
+                onClick={handleSortOrder}
+            >
+                {sortOrder === 'asc' ?
+                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M7.29289 16.7071C7.68342 17.0976 8.31658 17.0976 8.70711 16.7071L15.0711 10.3431C15.4616 9.95262 15.4616 9.31946 15.0711 8.92893C14.6805 8.53841 14.0474 8.53841 13.6569 8.92893L8 14.5858L2.34315 8.92893C1.95262 8.53841 1.31946 8.53841 0.928932 8.92893C0.538408 9.31946 0.538408 9.95262 0.928932 10.3431L7.29289 16.7071ZM9 1C9 0.447715 8.55228 6.58593e-09 8 0C7.44772 -6.58593e-09 7 0.447715 7 1L9 1ZM9 16L9 1L7 1L7 16L9 16Z"
+                            fill="#222222"/>
+                    </svg>
+                    : <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM7 16C7 16.5523 7.44772 17 8 17C8.55228 17 9 16.5523 9 16H7ZM7 1L7 16H9L9 1L7 1Z"
+                            fill="#222222"/>
+                    </svg>
+                }
+            </button>
         </div>
     );
 }
@@ -343,7 +449,8 @@ export function SurveyEngine() {
         <div className='survey-engine'>
             <Link
                 to={'/dashboard/create-trend-form'}
-                className="button-custom">
+                className="button-custom"
+            >
                 Create Survey
             </Link>
         </div>
@@ -368,26 +475,9 @@ export function TagEngine({tag, deleteFunction, className}) {
     )
 }
 
-// export function TrendTag({tag, deleteTag}) {
-//     const [value, setValue] = useState(tag || 'Edit this tag');
-//
-//     return (
-//         <div className="container-trend-tag component-custom">
-//             <div className="trend-tag">
-//                 {value}
-//             </div>
-//             <button className="trend-tag-delete button-custom" onClick={() => deleteTag(value)}>
-//                 <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-//                     <path fillRule="evenodd" clipRule="evenodd" d="M13 1.5L1 13.5ZM1 1.5L13 13.5Z" fill="#D8A353"/>
-//                     <path d="M13 1.5L1 13.5M1 1.5L13 13.5" stroke="#6E6E6E" strokeWidth="2" stroke-linecap="round"
-//                           strokeLinejoin="round"/>
-//                 </svg>
-//             </button>
-//         </div>
-//     );
-// }
-
-export function TrendTagAddEngine({trendTags, setTrendTags}) {
+export function TrendTagAddEngine({
+                                      trendTags, setTrendTags
+                                  }) {
     const [inputValue, setInputValue] = useState('');
     const deleteTag = (tagToDelete) => {
         setTrendTags(prevTags => prevTags.filter(tag => tag.key !== tagToDelete));
@@ -431,57 +521,63 @@ export function TrendTagAddEngine({trendTags, setTrendTags}) {
 }
 
 // VOTE ENGINE
-export function ElectionBallotEngine({ballot, isVoted = false}) {
+export function ElectionBallotEngine({
+                                        trend,
+                                         ballot,
+                                         isVoted = false,
+                                         typeInput = 'checkbox',
+                                     }) {
     const [isChecked, setIsChecked] = useState(isVoted);
-    const handleCheck = () => {
+    const [numberOfVotes, setNumberOfVotes] = useState(ballot.numberOfVotes);
+    const [name, setName] = useState(ballot.name);
+    const status = useSelector(state => state.status);
+    const handleCheck = async () => {
         setIsChecked(!isChecked);
-    }
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/trend/${ballot.trendId}/vote`, {
+            isVoted: !isChecked
+        }, {
+            params: {
+                gmail: status.gmail,
+                electionBallotId: ballot.id
+            }
+        })
+            .then(res => {
+                setNumberOfVotes(res.data.electionBallot.numberOfVotes);
+            })
+            .catch()
+            .finally()
+    };
     return (
         <div className="election-ballot-engine custom-component">
             <div className="container-election-ballot__header">
-                <input type="checkbox"
+                <input type={typeInput}
                        className="election-ballot"
                        onChange={handleCheck}
                        checked={isChecked}
+                       name={trend.id}
                 />
-                <div className="title-custom">{ballot.title}</div>
+                <div className="title-custom">{name}</div>
             </div>
             <div className="container-election-ballot__footer">
                 <div className="election-ballot__footer-item">
                     <div className="election-ballot__footer-item__icon">
-                        <svg width="15" height="17" viewBox="0 0 15 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="15" height="17" viewBox="0 0 15 17" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M14.4763 6.96402C14.2655 6.69414 14.0018 6.47689 13.7037 6.3276C13.4056 6.17831 13.0804 6.10062 12.7511 6.10002H9.33081L9.75085 4.95603C9.92556 4.45513 9.98375 3.91651 9.92041 3.38637C9.85707 2.85622 9.67411 2.35037 9.38721 1.91222C9.1003 1.47406 8.71803 1.11667 8.27317 0.870709C7.82832 0.624747 7.33416 0.497552 6.83309 0.500036C6.68881 0.500357 6.54768 0.545056 6.42661 0.628774C6.30555 0.712491 6.20969 0.831675 6.15053 0.972035L4.01285 6.10002H2.2502C1.65341 6.10002 1.08106 6.35288 0.659067 6.80297C0.237074 7.25305 0 7.8635 0 8.50002V14.1C0 14.7365 0.237074 15.347 0.659067 15.7971C1.08106 16.2471 1.65341 16.5 2.2502 16.5H11.7985C12.3249 16.4998 12.8346 16.3028 13.2389 15.9432C13.6432 15.5836 13.9165 15.0843 14.0112 14.532L14.9638 8.93202C15.0227 8.58592 15.0096 8.23024 14.9253 7.89016C14.8411 7.55008 14.6878 7.2339 14.4763 6.96402ZM3.75033 14.9H2.2502C2.05127 14.9 1.86048 14.8157 1.71982 14.6657C1.57916 14.5157 1.50013 14.3122 1.50013 14.1V8.50002C1.50013 8.28785 1.57916 8.08436 1.71982 7.93433C1.86048 7.78431 2.05127 7.70002 2.2502 7.70002H3.75033V14.9ZM13.5012 8.64402L12.5486 14.244C12.5166 14.4304 12.4237 14.5986 12.2864 14.7187C12.149 14.8389 11.9761 14.9031 11.7985 14.9H5.25046V7.06802L7.29063 2.17203C7.50064 2.23733 7.69567 2.34836 7.86343 2.4981C8.03118 2.64784 8.168 2.83304 8.26527 3.04202C8.36253 3.251 8.41812 3.47922 8.42852 3.71227C8.43893 3.94532 8.40393 4.17813 8.32572 4.39603L7.92819 5.54002C7.84348 5.78183 7.81488 6.0419 7.84484 6.29805C7.87479 6.55419 7.96241 6.79881 8.1002 7.01101C8.238 7.22322 8.42189 7.39671 8.63618 7.51669C8.85047 7.63667 9.08879 7.69957 9.33081 7.70002H12.7511C12.8613 7.69983 12.9702 7.72554 13.07 7.77531C13.1698 7.82509 13.2581 7.89771 13.3287 7.98802C13.4009 8.07708 13.4538 8.18205 13.4837 8.29545C13.5135 8.40885 13.5195 8.52787 13.5012 8.64402Z"
                                 fill="#222222"/>
                         </svg>
                     </div>
-                    <div className="election-ballot__footer-item__value">{ballot.numberofvotes} votes</div>
+                    <div className="election-ballot__footer-item__value">{numberOfVotes} votes</div>
                 </div>
             </div>
         </div>
     )
 }
 
-export function VoteSettingEngine({vote, deleteVote}) {
-    const [value, setValue] = useState(vote || 'Edit this tag');
-
-    return (
-        <div className="container-trend-tag component-custom">
-            <div className="trend-tag">
-                {value}
-            </div>
-            <button className="trend-tag-delete button-custom" onClick={() => deleteVote(value)}>
-                <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M13 1.5L1 13.5ZM1 1.5L13 13.5Z" fill="#D8A353"/>
-                    <path d="M13 1.5L1 13.5M1 1.5L13 13.5" stroke="#6E6E6E" strokeWidth="2" strokeLinecap="round"
-                          strokeLinejoin="round"/>
-                </svg>
-            </button>
-        </div>
-    );
-}
-
-export function ElectionBallotAddEngine({votes, setVotes}) {
+export function ElectionBallotAddEngine({
+                                            votes, setVotes
+                                        }) {
     const [inputValue, setInputValue] = useState('');
     const deleteElectionBallot = (voteToDelete) => {
         setVotes(prevVote => prevVote.filter(vote => vote.key !== voteToDelete));
@@ -530,9 +626,9 @@ export function TrendCardEngine({trend}) {
     const id = trend.id;
     const title = trend.name;
     const description = trend.description;
-    const tags = trend.tags;
-    const numberOfVotes = trend.numberofvotes;
-    const timeCreated = new Date(trend.timecreated);
+    const numberOfVotes = trend.numberOfVotes;
+    const timeCreated = new Date(trend.timeCreated);
+    const shortDescription = trend.shortDescription;
 
     const navigate = useNavigate();
     const handleClick = () => {
@@ -551,7 +647,7 @@ export function TrendCardEngine({trend}) {
             </div>
             <div className="container-trend-description">
                 <div className="trend-description">
-                    {description}
+                    {shortDescription}
                 </div>
             </div>
 
@@ -567,27 +663,18 @@ export function TrendCardEngine({trend}) {
                     <div className="trend-detail-item__value">{numberOfVotes}</div>
                 </div>
             </div>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                gap: '15px',
-            }}>
-                <div className="container-trend-tags">
-                    {tags && tags.slice(0, 4).map(tag => <TagEngine tag={tag}/>)}
-                </div>
-                <div className="button-follow button-custom">
-                    Follow
-                </div>
+            <div className="button-follow button-custom">
+                Show
             </div>
-
         </div>
     );
 
 }
 
 
-export function LoadingEngine({loading}) {
+export function LoadingEngine({
+                                  loading
+                              }) {
     if (!loading) {
         return null;
     }

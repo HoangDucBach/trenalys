@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS trends (
     name VARCHAR(255) NOT NULL,
     timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     numberOfVotes INTEGER DEFAULT 0,
-    description TEXT
+    description TEXT,
+    short_description VARCHAR(85),
 );
 
 CREATE TABLE IF NOT EXISTS election_ballots (
