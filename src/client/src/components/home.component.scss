@@ -208,7 +208,7 @@
     flex-direction: column;
     gap: $spacing-xlarge;
     width: 100%;
-    align-items: center;
+    align-items: flex-start;
 
     &__section {
       display: flex;
