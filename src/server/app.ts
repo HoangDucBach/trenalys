@@ -7,6 +7,7 @@ import {config} from "./config";
 import dashboardRoute from "./routes/dashboard.route";
 import globalRoute from "./routes/global.route";
 import path from "path";
+
 export const app = express();
 const port = process.env.PORT || 8000;
 require('dotenv-flow').config({
@@ -14,7 +15,12 @@ require('dotenv-flow').config({
 });
 
 const allowList = ['https://trenalys.vercel.app', 'https://trenalys.io.vn'];
-app.use(cors());
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept, x-client-key, x-client-token, x-client-secret, Authorization");
+    next();
+});
 console.log(process.env.URL_CLIENT);
 app.use(express.json());
 app.use(cookieParser());
