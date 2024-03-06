@@ -20,10 +20,16 @@ import {
     DashboardHomeComponent, DashboardHomeMain, DashboardProfileComponent, DashboardTrendComponent
 } from "./components/dashboard.component";
 
-console.log = () => {}
-console.error = () => {}
-console.debug = () => {}
+
 function App() {
+    useEffect(() => {
+        console.log = () => {
+        }
+        console.error = () => {
+        }
+        console.debug = () => {
+        }
+    });
     const dispatch = useDispatch();
     const status = useSelector(state => state.status);
     const testConnect = () => {
