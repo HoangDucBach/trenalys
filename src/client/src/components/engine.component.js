@@ -205,11 +205,11 @@ export function RegisterEngine() {
         axios
             .post(`${process.env.REACT_APP_SERVER_URL}/register`, registerData)
             .then(res => {
-                setRegisterStatus(true);
                 setGmail('');
                 setPassword('');
                 setConfirmPassword('');
                 setInputCode('');
+                setIsRegistering(false);
                 dispatch({
                     type: 'RECEIVE_NOTIFICATION',
                     payload: {
