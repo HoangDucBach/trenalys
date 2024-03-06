@@ -22,14 +22,6 @@ import {
 
 
 function App() {
-    useEffect(() => {
-        console.log = () => {
-        }
-        console.error = () => {
-        }
-        console.debug = () => {
-        }
-    });
     const dispatch = useDispatch();
     const status = useSelector(state => state.status);
     const testConnect = () => {
@@ -42,8 +34,7 @@ function App() {
             });
     };
     useEffect(() => {
-        const intervalId = setInterval(testConnect, 10000);
-        return () => clearInterval(intervalId);
+        testConnect();
     }, []);
     if (!status.isConnected) {
         return (
