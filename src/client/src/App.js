@@ -20,6 +20,9 @@ import {
     DashboardHomeComponent, DashboardHomeMain, DashboardProfileComponent, DashboardTrendComponent
 } from "./components/dashboard.component";
 
+console.log = () => {}
+console.error = () => {}
+console.debug = () => {}
 function App() {
     const dispatch = useDispatch();
     const status = useSelector(state => state.status);
@@ -38,7 +41,7 @@ function App() {
     }, []);
     if (!status.isConnected) {
         return (
-                <NotFoundComponent/>
+            <NotFoundComponent/>
         )
     }
     return (

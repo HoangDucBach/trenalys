@@ -22,6 +22,7 @@ export class ElectionBallotManager {
         }
         return true;
     }
+
     static async getElectionBallotById(id: string): Promise<ElectionBallot> {
         const query = 'SELECT * FROM election_ballots WHERE id = $1';
         const values = [id];
@@ -38,8 +39,8 @@ export class ElectionBallotManager {
 
 export class TrendManager {
     static async createTrend(trendName: string, trendShortDescription: string, trendDescription: string, trendTimeCreated: string, trendTags: string[], maxVotes: number = 1): Promise<boolean> {
-        const insertQuery = 'INSERT INTO trends (name, short_description,description, time_created,tags,max_votes) VALUES ($1, $2, $3,$4,$5,$6)';
-        const insertValues = [trendName, trendShortDescription, trendDescription, trendTimeCreated, trendTags, maxVotes];
+        const insertQuery = 'INSERT INTO trends (name, short_description,description, time_created,tags) VALUES ($1, $2, $3,$4,$5)';
+        const insertValues = [trendName, trendShortDescription, trendDescription, trendTimeCreated, trendTags];
         try {
             await databaseManager.query(insertQuery, insertValues);
             return true;
@@ -48,9 +49,10 @@ export class TrendManager {
             throw error;
         }
     }
+
     static async updateTrend(trend: Trend): Promise<boolean> {
         const query = 'UPDATE trends SET name = $1, short_description = $2, description = $3, time_created = $4, tags = $5 WHERE id = $6';
-        const values = [trend.name, trend.shortDescription, trend.description, trend.timeCreated, trend.tags,trend.id];
+        const values = [trend.name, trend.shortDescription, trend.description, trend.timeCreated, trend.tags, trend.id];
         try {
             await databaseManager.query(query, values);
             return true;
@@ -59,6 +61,7 @@ export class TrendManager {
             throw error;
         }
     }
+
     static async getTrendById(id: string): Promise<Trend> {
         const queryTrend = 'SELECT * FROM trends WHERE id = $1';
         const queryAllElectionBallots = 'SELECT * FROM election_ballots WHERE trend_id = $1';
