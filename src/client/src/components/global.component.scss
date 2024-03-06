@@ -78,7 +78,7 @@
     color: $color-highlight;
     animation: bounce 5s infinite;
     @include for-mobile {
-      font-size: 150px;
+      font-size: 80px;
     }
   }
   & h2 {

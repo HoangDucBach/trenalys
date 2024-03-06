@@ -22,21 +22,21 @@ const allowList = ['https://trenalys.vercel.app', 'https://trenalys.io.vn'];
 //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept, x-client-key, x-client-token, x-client-secret, Authorization");
 //     next();
 // });
-// const whitelist = ['https://trenalys.vercel.app', 'https://trenalys.io.vn','http://192.168.1.5:3000/']
-// const corsOptions = {
-//     origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
-//         if (whitelist.indexOf(origin !== undefined ? origin : '') !== -1) {
-//             callback(null, true)
-//         } else {
-//             callback(new Error('Not allowed by CORS'))
-//         }
-//     },
-//     credentials: true,
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//     allowedHeaders: "Content-Type,Authorization",
-// };
-// app.use(cors(corsOptions));
-app.use(cors({origin: true, credentials: true}));
+const whitelist = ['https://trenalys.vercel.app', 'https://trenalys.io.vn','http://192.168.1.5:3000/']
+const corsOptions = {
+    origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+        if (whitelist.indexOf(origin !== undefined ? origin : '') !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    },
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
+};
+app.use(cors(corsOptions));
+// app.use(cors({origin: true, credentials: true}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
