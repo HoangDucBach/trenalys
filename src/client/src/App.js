@@ -38,7 +38,9 @@ function App() {
     }, []);
     if (!status.isConnected) {
         return (
-            <NotFoundComponent/>
+            <Body>
+                <NotFoundComponent/>
+            </Body>
         )
     }
     return (
