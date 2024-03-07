@@ -33,13 +33,30 @@ function App() {
                 dispatch(disconnect());
             });
     };
-    const instance = axios.create();
-    instance.interceptors.request.use(config => {
-        testConnect();
-        return config;
-    }, error => {
-        return Promise.reject(error);
-    });
+    axios.interceptors.response.use(
+        response => {
+            return response;
+        },
+        error => {
+            if (error.response && error.response.status === 404) {
+                dispatch(disconnect());
+            }
+            return Promise.reject(error);
+        }
+    );
+    useEffect(() => {
+        let intervalId;
+        if (!status.isConnected) {
+            intervalId = setInterval(() => {
+                testConnect();
+            }, 10000);
+        }
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        };
+    }, [status.isConnected]);
     if (!status.isConnected) {
         return (
             <NotFoundComponent/>
