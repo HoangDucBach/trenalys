@@ -99,12 +99,14 @@ export function DashboardHeaderLeft() {
 export function DashboardHomeMain() {
     const server = useSelector(state => state.server);
     const [trends, setTrends] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const sortType = server.dashboard.home.sortType;
     const sortOrder = server.dashboard.home.sortOrder;
 
     useEffect(() => {
         async function getTrends() {
+            setIsLoading(true);
             if (!sortOrder || !sortType) return;
             await axios
                 .get(`${process.env.REACT_APP_SERVER_URL}/dashboard/home/get-trends`,
@@ -116,6 +118,7 @@ export function DashboardHomeMain() {
                     }
                 ).then(res => {
                     setTrends(res.data.data);
+                    setIsLoading(false);
                 }).catch(err => {
                     console.error('err:', err);
                 })
@@ -124,6 +127,11 @@ export function DashboardHomeMain() {
 
         getTrends().then();
     }, [sortOrder, sortType]);
+    if(isLoading) return (
+        <div className="dashboard-home-main">
+            <h1>Loading...</h1>
+        </div>
+    );
     return (
         <div className="dashboard-home-main">
             <div className="container-trend-card-engine">
@@ -226,7 +234,7 @@ export function DashboardCreateTrendFormMain() {
                         id='create-trend-form__input--title'
                         value={title}
                         setValue={setTitle}
-                        maxLength={440}
+                        maxLength={40}
                     />
                     <InputEngine
                         typeInput={'textarea'}
