@@ -5,7 +5,7 @@ import {
     SortEngine,
     SurveyEngine,
     TrendCardEngine,
-    TrendTagAddEngine, ElectionBallotAddEngine, ElectionBallotEngine
+    TrendTagAddEngine, ElectionBallotAddEngine, ElectionBallotEngine, LoadingEngine
 } from "./engine.component";
 import axios from "axios";
 import {useEffect, useState} from "react";
@@ -161,9 +161,10 @@ export function DashboardCreateTrendFormMain() {
     const [shortDescription, setShortDescription] = useState('');
     const [trendTags, setTrendTags] = useState([]);
     const [electionBallots, setElectionBallots] = useState([]);
-
+    const [isCreating, setIsCreating] = useState(false);
 
     const handleSubmit = async (e) => {
+        setIsCreating(true);
         e.preventDefault();
         const formData = {
             trendName: title,
@@ -186,6 +187,7 @@ export function DashboardCreateTrendFormMain() {
                 setTimeout(() => {
                     navigate('/dashboard/home');
                 }, 3000);
+                setIsCreating(false);
             })
             .catch(err => {
                 dispatch({
@@ -198,7 +200,7 @@ export function DashboardCreateTrendFormMain() {
                 })
                 console.error('err:', err);
             });
-    }
+    };
     return (
         <div className="dashboard-create-trend-form-main">
             <CustomForm
@@ -219,12 +221,12 @@ export function DashboardCreateTrendFormMain() {
                     <InputEngine
                         typeInput={'input'}
                         title='Title'
-                        placeholder='Max 20 characters'
+                        placeholder='Max 40 characters'
                         type='text'
                         id='create-trend-form__input--title'
                         value={title}
                         setValue={setTitle}
-                        maxLength={20}
+                        maxLength={440}
                     />
                     <InputEngine
                         typeInput={'textarea'}
@@ -284,6 +286,7 @@ export function DashboardCreateTrendFormMain() {
                     <Link to={'/dashboard/home'} className="button-custom"
                           id='create-trend-form__button--cancel'>Cancel</Link>
                     <button type='submit' className="button-custom" id='create-trend-form__button--create'>Create
+                        <LoadingEngine loading={isCreating}/>
                     </button>
                 </div>
             </CustomForm>

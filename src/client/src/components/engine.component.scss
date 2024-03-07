@@ -83,7 +83,8 @@ $spinner-color: $color-60;
       color: $color-60;
       font-weight: 700;
     }
-    .title-custom{
+
+    .title-custom {
       @include for-mobile() {
         display: none;
       }
@@ -340,6 +341,7 @@ $spinner-color: $color-60;
   flex-direction: row;
   align-items: center;
   gap: $spacing-normal;
+  justify-content: space-between;
   width: 100%;
 
   & .trend-id {
@@ -352,6 +354,11 @@ $spinner-color: $color-60;
 
     color: $color-highlight;
     border: 2px solid $color-highlight;
+  }
+
+  & .trend-title {
+    max-width: 13em;
+    word-break: break-word;
   }
 }
 

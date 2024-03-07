@@ -680,7 +680,6 @@ export function ElectionBallotAddEngine({
 export function TrendCardEngine({trend}) {
     const id = trend.id;
     const title = trend.name;
-    const description = trend.description;
     const numberOfVotes = trend.numberOfVotes;
     const timeCreated = new Date(trend.timeCreated);
     const shortDescription = trend.shortDescription;
@@ -710,7 +709,11 @@ export function TrendCardEngine({trend}) {
                 <div className="container-trend-detail-item">
                     <div className="trend-detail-item__title">Created</div>
                     <div className="trend-detail-item__value">{
-                        timeCreated.toLocaleDateString("en-US")
+                        timeCreated.toLocaleDateString("en-US",{
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                        })
                     }</div>
                 </div>
                 <div className="container-trend-detail-item">
