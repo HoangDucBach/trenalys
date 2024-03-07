@@ -167,7 +167,7 @@ export function AboutComponent() {
                         </svg>
                     </div>
                     <div className="container-section__section__description">
-                        The <b>Trenalys</b> project is a website social networking application built to help people,
+                        The Trenalys project is a website social networking application built to help people,
                         especially
                         young people, survey their trending questions that they want to see everyone's opinions on, by
                         creating questions. Ask that question for everyone to vote on. The system will provide a chart

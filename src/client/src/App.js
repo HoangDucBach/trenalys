@@ -33,9 +33,13 @@ function App() {
                 dispatch(disconnect());
             });
     };
-    useEffect(() => {
+    const instance = axios.create();
+    instance.interceptors.request.use(config => {
         testConnect();
-    }, []);
+        return config;
+    }, error => {
+        return Promise.reject(error);
+    });
     if (!status.isConnected) {
         return (
             <NotFoundComponent/>
