@@ -57,11 +57,6 @@ function App() {
             }
         };
     }, [status.isConnected]);
-    if (!status.isConnected) {
-        return (
-            <NotFoundComponent/>
-        )
-    }
     return (
         <BrowserRouter>
             <Routes>
